@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:RenamerMediaFiles.ViewModels"
+             xmlns:views="clr-namespace:RenamerMediaFiles.Views"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="RenamerMediaFiles.Views.MainView"
+             x:DataType="viewModels:MainViewModel">
+    <Design.DataContext>
+        <viewModels:MainViewModel />
+    </Design.DataContext>
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="TransparentGray" Color="Gray" Opacity="0.7" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <views:SettingsView Grid.Row="0" Content="{Binding SettingsViewModel}"/>
+            <Button Grid.Row="1" Content="Read a list of files" FontWeight="Bold" Command="{Binding ReadCommand}" />
+            <Button Grid.Row="2" Content="Rename selected files" FontWeight="Bold" Command="{Binding RenameCommand}" />
+
+            <ItemsControl Grid.Row="3" ItemsSource="{Binding FileViewModels}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.Template>
+                    <ControlTemplate TargetType="ItemsControl">
+                        <Border BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                Background="{TemplateBinding Background}">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                          Padding="{TemplateBinding Padding}"
+                                          Focusable="False">
+                                <ItemsPresenter/>
+                                <!-- <DataTemplate DataType="{x:Type viewModels:FileItemViewModel}"> -->
+                                    <!-- <views:FileItemView Content="{Binding}" /> -->
+                                <!-- </DataTemplate> -->
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+            </ItemsControl>
+        </Grid>
+        <Grid IsVisible="{Binding IsBusy}" Background="{StaticResource TransparentGray}">
+            <TextBlock Text="{Binding Status}" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        </Grid>
+    </Grid>
+
+
+</UserControl>

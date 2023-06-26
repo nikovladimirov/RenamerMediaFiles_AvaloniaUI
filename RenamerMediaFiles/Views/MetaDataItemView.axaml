@@ -1,0 +1,28 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             x:Class="RenamerMediaFiles.Views.MetaDataItemView"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:RenamerMediaFiles.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="30" d:DesignWidth="1000"
+             x:DataType="viewModels:MetadataItemViewModel"
+             VerticalContentAlignment="Center">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <CheckBox IsChecked="{Binding Selected}" Margin="2" />
+        <Grid Grid.Column="1" IsEnabled="{Binding Selected}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="{Binding DateSourceDisplayValue, Mode=OneWay}" />
+            <TextBlock Grid.Column="1" Text="{Binding SourceDateTimeDisplayValue, Mode=OneWay}" />
+            <TextBox Grid.Column="2" Text="{Binding NewFileName}"/>
+        </Grid>
+    </Grid>
+</UserControl>
