@@ -7,9 +7,6 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="RenamerMediaFiles.Views.MainView"
              x:DataType="viewModels:MainViewModel">
-    <Design.DataContext>
-        <viewModels:MainViewModel />
-    </Design.DataContext>
     <Grid>
         <Grid Margin="10">
             <Grid.RowDefinitions>
@@ -20,7 +17,7 @@
             </Grid.RowDefinitions>
 
             <views:SettingsView Grid.Row="0" Content="{Binding SettingsViewModel}"/>
-            <Button Grid.Row="1" Content="Read a list of files" FontWeight="Bold" Command="{Binding ReadCommand}" />
+            <Button Grid.Row="1" Content="Read a list of files" FontWeight="Bold" Command="{Binding Read}" />
             <Button Grid.Row="2" Content="Rename selected files" FontWeight="Bold" Command="{Binding RenameCommand}" />
 
             <ItemsControl Grid.Row="3" ItemsSource="{Binding Files}">
@@ -38,16 +35,13 @@
                                           Padding="{TemplateBinding Padding}"
                                           Focusable="False">
                                 <ItemsPresenter/>
-                                <!-- <DataTemplate DataType="{x:Type viewModels:FileItemViewModel}"> -->
-                                    <!-- <views:FileItemView Content="{Binding}" /> -->
-                                <!-- </DataTemplate> -->
                             </ScrollViewer>
                         </Border>
                     </ControlTemplate>
                 </ItemsControl.Template>
             </ItemsControl>
         </Grid>
-        <Grid IsVisible="{Binding IsBusy}" Background="{StaticResource TransparentGray}">
+        <Grid Classes="BusyBackground" IsVisible="{Binding IsBusy}">
             <TextBlock Text="{Binding Status}" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center" />
         </Grid>
     </Grid>

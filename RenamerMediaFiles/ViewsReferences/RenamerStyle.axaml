@@ -11,14 +11,28 @@
     </Style>
     <Style Selector="TextBlock">
         <Setter Property="Margin" Value="1" />
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
     </Style>
     <Style Selector="CheckBox">
         <Setter Property="Margin" Value="1" />
     </Style>
     <Style Selector="TextBox">
         <Setter Property="Margin" Value="1" />
+        <Setter Property="CornerRadius" Value="2"/>
     </Style>
     <Style Selector="Button">
         <Setter Property="Margin" Value="1" />
+        <Setter Property="CornerRadius" Value="2"/>
+    </Style>
+    <Style Selector="Border">
+        <Setter Property="Margin" Value="1" />
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="2"/>
+        <Setter Property="BorderBrush" Value="LightGray" />
+    </Style>
+    
+    <Style Selector="Grid.BusyBackground">
+        <Setter Property="Background" Value="Gray"/>
+        <Setter Property="Opacity" Value="0.7"/>
     </Style>
 </Styles>

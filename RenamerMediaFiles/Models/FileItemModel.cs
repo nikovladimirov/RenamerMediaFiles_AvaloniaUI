@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using MetadataExtractor;
+using Microsoft.Extensions.DependencyInjection;
 using RenamerMediaFiles.Helpers;
 using RenamerMediaFiles.Services.Interfaces;
 
@@ -32,11 +33,13 @@ namespace RenamerMediaFiles.Models
                     },
                 };
 
-        private readonly IDialogService _dialogService;
-        public string NewNameFormat { get; private set; }
+        private IDialogService _dialogService;
         private readonly bool _replaceFullName;
         private string _additionalName;
 
+        IDialogService DialogService => _dialogService ??= App.Current.Services.GetService<IDialogService>();
+
+        public string NewNameFormat { get; private set; }
         public string FilePathDisplayValue { get; private set; }
         public string FilePath { get; private set; }
         public string OriginalFileName { get; private set; }
@@ -62,6 +65,11 @@ namespace RenamerMediaFiles.Models
             {
                 Exception = $"ReadMetaData. {ex.Message}";
             }
+        }
+        
+        public void ShowFileInFolder(string path)
+        {
+            DialogService.ShowFileInFolder(path);
         }
 
         private void RefreshFileInfo(FileInfo fileInfo, string rootPath, IEnumerable<StringModel> removingNameParts)
@@ -163,12 +171,6 @@ namespace RenamerMediaFiles.Models
                 MetaDataItems.Add(new MetadataItemModel(resultDateTime, dateSource, _replaceFullName, NewNameFormat, _additionalName));
             else
                 existResultDateTime.AddDateSource(dateSource);
-        }
-        
-
-        public void ShowFileInFolder(string path)
-        {
-            _dialogService.ShowFileInFolder(path);
         }
     }
 }

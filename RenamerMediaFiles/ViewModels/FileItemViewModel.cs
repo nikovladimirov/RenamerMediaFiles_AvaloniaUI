@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using RenamerMediaFiles.Models;
 
@@ -25,7 +24,7 @@ namespace RenamerMediaFiles.ViewModels
         public string FullName => _fileItemModel.FileInfo.FullName;
         
         [RelayCommand]
-        public void OpenFolderCommand(string path)
+        public void OpenFolder(string path)
         {
             _fileItemModel.ShowFileInFolder(path);
         }

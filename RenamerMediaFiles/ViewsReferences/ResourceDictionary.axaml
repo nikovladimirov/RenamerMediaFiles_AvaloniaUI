@@ -3,7 +3,5 @@
                     xmlns:converters="clr-namespace:RenamerMediaFiles.Converters">
     
     <converters:StringIsNullToBoolConverter x:Key="StringIsNullToBoolConverter" />
-   
-    <SolidColorBrush x:Key="FileBorderBrush" Color="LightGray"/>
-    <SolidColorBrush x:Key="TransparentGray" Color="Gray" Opacity="0.7" />
+    
 </ResourceDictionary>

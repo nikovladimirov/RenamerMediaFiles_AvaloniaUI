@@ -37,8 +37,10 @@ public partial class App : Application
 
         services.AddSingleton<IFileService, JsonFileService>();
         services.AddSingleton<IDialogService, DialogService>();
+        
         services.AddSingleton<SettingsModel, SettingsModel>();
         services.AddSingleton<SettingsViewModel, SettingsViewModel>();
+        
         services.AddSingleton<MainModel, MainModel>();
         services.AddSingleton<MainViewModel, MainViewModel>();
 
