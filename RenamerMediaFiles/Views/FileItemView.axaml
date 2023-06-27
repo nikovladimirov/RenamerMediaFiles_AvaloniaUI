@@ -9,12 +9,6 @@
              mc:Ignorable="d"             
              x:DataType="viewModels:FileItemViewModel"
              d:DesignHeight="300" d:DesignWidth="300">
-    
-    <UserControl.Resources>
-        <converters:StringIsNullToBoolConverter x:Key="StringIsNullToBoolConverter" />
-        <SolidColorBrush x:Key="FileBorderBrush" Color="LightGray"/>
-    </UserControl.Resources>
-
     <Grid>
         <Border BorderThickness="1" BorderBrush="{StaticResource FileBorderBrush}" Margin="1">
             <Grid>

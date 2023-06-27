@@ -10,9 +10,6 @@
     <Design.DataContext>
         <viewModels:MainViewModel />
     </Design.DataContext>
-    <UserControl.Resources>
-        <SolidColorBrush x:Key="TransparentGray" Color="Gray" Opacity="0.7" />
-    </UserControl.Resources>
 
     <Grid>
         <Grid Margin="10">
