@@ -14,6 +14,7 @@ namespace RenamerMediaFiles.ViewModels
         [ObservableProperty] private List<FileItemViewModel> files;
 
         private RelayCommand _renameCommand;
+        private RelayCommand _readCommand;
 
         public MainViewModel(MainModel mainModel, SettingsViewModel settingsViewModel)
         {
@@ -21,11 +22,13 @@ namespace RenamerMediaFiles.ViewModels
             _mainModel.PropertyChanged += MainWindowModelOnPropertyChanged;
 
             SettingsViewModel = settingsViewModel;
+            SettingsViewModel.PropertyChanged+= SettingsViewModelOnPropertyChanged;
         }
 
         ~MainViewModel()
         {
             _mainModel.PropertyChanged -= MainWindowModelOnPropertyChanged;
+            SettingsViewModel.PropertyChanged -= SettingsViewModelOnPropertyChanged;
         }
 
         #region Properties
@@ -39,17 +42,22 @@ namespace RenamerMediaFiles.ViewModels
         #region Commands
 
         public RelayCommand RenameCommand => _renameCommand ??= new RelayCommand(Rename, CanRename);
-
-        [RelayCommand]
-        public void Read(object obj)
-        {
-            _mainModel.Read();
-        }
+        public RelayCommand ReadCommand => _readCommand ??= new RelayCommand(Read, CanRead);
 
         #endregion Commands
 
         #region Private Methods
 
+
+        private void SettingsViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(SettingsViewModel.IsValidSettings):
+                    ReadCommand.NotifyCanExecuteChanged();
+                    break;
+            }
+        }
         private void MainWindowModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
@@ -71,6 +79,16 @@ namespace RenamerMediaFiles.ViewModels
         private bool CanRename()
         {
             return Files != null && Files.Count > 0;
+        }
+        
+        public void Read()
+        {
+            _mainModel.Read();
+        }
+
+        public bool CanRead()
+        {
+            return SettingsViewModel.IsValidSettings;
         }
 
         #endregion Private Methods

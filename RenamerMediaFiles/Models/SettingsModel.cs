@@ -27,12 +27,6 @@ namespace RenamerMediaFiles.Models
             _dialogService = dialogService;
         }
 
-        public void Init()
-        {
-            LoadConfig();
-            CheckFields();
-        }
-
         #region Serialized Properties
 
         public ObservableCollection<StringModel> RemovingByMasks { get; set; } = new ObservableCollection<StringModel>();
@@ -105,8 +99,13 @@ namespace RenamerMediaFiles.Models
         }
 
         #endregion
-        
 
+        public void Init()
+        {
+            LoadConfig();
+            CheckFields();
+        }
+        
         public void RemoveMaskItemMethod()
         {
             if (RemovingByMasks.Count == 0)
@@ -163,7 +162,6 @@ namespace RenamerMediaFiles.Models
         {
             if (!Directory.Exists(RootPath))
                 return false;
-
             MaskTextDemo = DateTime.Now.ToString(_newNameFormat);
 
             return true;

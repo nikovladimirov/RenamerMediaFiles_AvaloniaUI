@@ -29,8 +29,8 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Content="Load" Command="{Binding LoadConfigCommand}" />
-                <Button Grid.Column="1" Content="Save" Command="{Binding SaveConfigCommand}" />
+                <Button Grid.Column="0" Content="Load" Command="{Binding LoadConfig}" />
+                <Button Grid.Column="1" Content="Save" Command="{Binding SaveConfig}" />
             </Grid>
 
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Folder:" />
@@ -42,7 +42,7 @@
                 <TextBox Grid.Column="0" TextWrapping="Wrap"
                          AcceptsReturn="True" 
                          Text="{Binding RootPath}" />
-                <Button Grid.Column="1" Content=" ... " Command="{Binding SelectFolderCommand}" />
+                <Button Grid.Column="1" Content=" ... " Command="{Binding SelectFolder}" />
             </Grid>
 
 
@@ -81,9 +81,9 @@
                   IsEnabled="{Binding !ReplaceFullName}">
                 <StackPanel>
                     <TextBlock Text="Removing by mask:" />
-                    <Button Content="+" Command="{Binding AddMaskItemCommand}" />
-                    <Button Content="-" Command="{Binding RemoveMaskItemCommand}" />
-                    <Button Content="default" Command="{Binding SetDefaultMaskItemsCommand}" />
+                    <Button Content="+" Command="{Binding AddMaskItem}" />
+                    <Button Content="-" Command="{Binding RemoveMaskItem}" />
+                    <Button Content="default" Command="{Binding SetDefaultMaskItems}" />
                 </StackPanel>
             </Grid>
 

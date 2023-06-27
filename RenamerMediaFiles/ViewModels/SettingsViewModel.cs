@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RenamerMediaFiles.Models;
@@ -26,8 +25,9 @@ namespace RenamerMediaFiles.ViewModels
 
         public IReadOnlyCollection<StringModel> RemovingByMasks => _settingsModel.RemovingByMasks;
 
+        public bool IsValidSettings => _settingsModel.IsValidSettings;
         public string MaskTextDemo => _settingsModel.MaskTextDemo;
-        
+
         public string RootPath
         {
             get => _settingsModel.RootPath;
@@ -59,42 +59,47 @@ namespace RenamerMediaFiles.ViewModels
         }
         #endregion
 
-        #region Private Methods
-
+        #region Commands
+        
         [RelayCommand]
-        public void AddMaskItemCommand()
+        public void AddMaskItem()
         {
             _settingsModel.RemovingByMasks.Insert(0, new StringModel(@"^<your regex value>$"));
         }
+        
         [RelayCommand]
-        public void LoadConfigCommand()
+        public void LoadConfig()
         {
             _settingsModel.LoadConfig();
         }
 
         [RelayCommand]
-        public void SaveConfigCommand()
+        public void SaveConfig()
         {
             _settingsModel.SaveConfig();
         }
 
         [RelayCommand]
-        public void SetDefaultMaskItemsCommand()
+        public void SetDefaultMaskItems()
         {
             _settingsModel.SetDefaultMaskItemsMethod();
         }
         
         [RelayCommand]
-        public void SelectFolderCommand()
+        public void SelectFolder()
         {
             _settingsModel.SelectFolder();
         }
 
         [RelayCommand]
-        public void RemoveMaskItemCommand()
+        public void RemoveMaskItem()
         {
             _settingsModel.RemoveMaskItemMethod();
         }
+        
+        #endregion Commands
+        
+        #region Private Methods
 
         private void SettingsModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
