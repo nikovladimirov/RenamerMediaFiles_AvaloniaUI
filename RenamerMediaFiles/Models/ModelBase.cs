@@ -1,7 +1,7 @@
-﻿using ReactiveUI;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace RenamerMediaFiles.Models;
 
-public class ModelBase : ReactiveObject
+public class ModelBase : ObservableObject
 {
 }

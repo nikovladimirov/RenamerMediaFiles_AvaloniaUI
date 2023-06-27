@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using Newtonsoft.Json;
-using ReactiveUI;
+
 using RenamerMediaFiles.Helpers;
 using RenamerMediaFiles.Services.Interfaces;
 
@@ -45,7 +45,7 @@ namespace RenamerMediaFiles.Models
             }
             set
             {
-                this.RaiseAndSetIfChanged(ref _rootPath, value);
+                SetProperty(ref _rootPath, value);
                 CheckFields();
             }
         }
@@ -55,7 +55,7 @@ namespace RenamerMediaFiles.Models
             get => _extensionText;
             set
             {
-                this.RaiseAndSetIfChanged(ref _extensionText, value);
+                SetProperty(ref _extensionText, value);
                 CheckFields();
             }
         }
@@ -65,7 +65,7 @@ namespace RenamerMediaFiles.Models
             get => _newNameFormat;
             set
             {
-                this.RaiseAndSetIfChanged(ref _newNameFormat, value);
+                SetProperty(ref _newNameFormat, value);
                 CheckFields();
             }
         }
@@ -75,7 +75,7 @@ namespace RenamerMediaFiles.Models
             get => _timeZoneOffset;
             set
             {
-                this.RaiseAndSetIfChanged(ref _timeZoneOffset, value);
+                SetProperty(ref _timeZoneOffset, value);
                 CheckFields();
             }
         }
@@ -83,7 +83,7 @@ namespace RenamerMediaFiles.Models
         public bool ReplaceFullName
         {
             get => _replaceFullName;
-            set => this.RaiseAndSetIfChanged(ref _replaceFullName, value);
+            set => SetProperty(ref _replaceFullName, value);
         }
 
         #endregion Serialized Properties
@@ -94,14 +94,14 @@ namespace RenamerMediaFiles.Models
         public string MaskTextDemo
         {
             get => _maskTextDemo;
-            private set => this.RaiseAndSetIfChanged(ref _maskTextDemo, value);
+            private set => SetProperty(ref _maskTextDemo, value);
         }
 
         [JsonIgnore]
         public bool IsValidSettings
         {
             get => _isValidSettings;
-            private set => this.RaiseAndSetIfChanged(ref _isValidSettings, value);
+            private set => SetProperty(ref _isValidSettings, value);
         }
 
         #endregion
@@ -139,7 +139,7 @@ namespace RenamerMediaFiles.Models
                 }
 
                 loadedSettings.CopyByInterfaceTo(this);
-                // OnPropertyChanged(nameof(RemovingByMasks));
+                OnPropertyChanged(nameof(RemovingByMasks));
             }
             catch (Exception ex)
             {

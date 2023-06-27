@@ -2,9 +2,9 @@
 
 namespace RenamerMediaFiles.Views
 {
-    public partial class MetaDataItemView : UserControl
+    public partial class MetadataItemView : UserControl
     {
-        public MetaDataItemView()
+        public MetadataItemView()
         {
             InitializeComponent();
         }

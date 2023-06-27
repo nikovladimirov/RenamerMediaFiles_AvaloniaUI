@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ReactiveUI;
+
 using RenamerMediaFiles.Helpers;
 using RenamerMediaFiles.Services.Interfaces;
 using RenamerMediaFiles.Workers;
@@ -30,11 +30,7 @@ namespace RenamerMediaFiles.Models
         public List<FileItemModel> Files
         {
             get => _files;
-            private set
-            {
-                _files = value;
-                this.RaiseAndSetIfChanged(ref _files, value);
-            }
+            private set => SetProperty(ref _files, value);
         }
 
         #endregion Settings Properties
@@ -44,21 +40,13 @@ namespace RenamerMediaFiles.Models
         public string Status
         {
             get => _status;
-            private set
-            {
-                _status = value;
-                this.RaiseAndSetIfChanged(ref _status, value);
-            }
+            private set => SetProperty(ref _status, value);
         }
                 
         public bool IsBusy
         {
             get => _isBusy;
-            private set
-            {
-                _isBusy = value;
-                this.RaiseAndSetIfChanged(ref _isBusy, value);
-            }
+            private set => SetProperty(ref _isBusy, value);
         }
 
         #endregion Properties

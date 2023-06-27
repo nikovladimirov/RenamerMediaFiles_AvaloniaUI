@@ -54,7 +54,7 @@
                     <ListBox ItemsSource="{Binding MetaDataItems}" VerticalAlignment="Center">
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="{x:Type viewModels:MetadataItemViewModel}">
-                                <views:MetaDataItemView Content="{Binding}"/>
+                                <views:MetadataItemView Content="{Binding}"/>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>

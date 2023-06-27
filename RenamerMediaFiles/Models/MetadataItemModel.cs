@@ -4,7 +4,7 @@ using RenamerMediaFiles.Helpers;
 
 namespace RenamerMediaFiles.Models
 {
-    public class MetadataItemModel 
+    public class MetadataItemModel : ModelBase 
     {
         private List<DateSource> _dateSources;
         private bool _selected;
@@ -14,11 +14,8 @@ namespace RenamerMediaFiles.Models
         public string NewFileName { get; set; }
         public bool Selected
         {
-            get { return _selected;}
-            set
-            {
-                _selected = value;
-            } 
+            get => _selected;
+            set => SetProperty(ref _selected, value);
         }
         public string DateSourceDisplayValue => string.Join("; ", _dateSources);
 

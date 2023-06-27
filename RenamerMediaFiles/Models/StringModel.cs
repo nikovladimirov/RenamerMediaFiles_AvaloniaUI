@@ -1,8 +1,6 @@
-﻿using RenamerMediaFiles.Helpers;
-
-namespace RenamerMediaFiles.Models
+﻿namespace RenamerMediaFiles.Models
 {
-    public class StringModel 
+    public class StringModel : ModelBase
     {
         private string _value;
 
@@ -13,11 +11,8 @@ namespace RenamerMediaFiles.Models
 
         public string Value
         {
-            get { return _value; }
-            set
-            {
-                _value = value;
-            }
+            get => _value;
+            set => SetProperty(ref _value, value);
         }
     }
 }

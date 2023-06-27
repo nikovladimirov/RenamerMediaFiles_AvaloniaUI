@@ -1,52 +1,29 @@
-﻿using System.Collections.ObjectModel;
-using System.Reactive;
-using System.Windows.Input;
-using ReactiveUI;
-using RenamerMediaFiles.Helpers;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using RenamerMediaFiles.Models;
 
 namespace RenamerMediaFiles.ViewModels
 {
-    public class SettingsViewModel : ViewModelBase
+    public partial class SettingsViewModel : ViewModelBase
     {
         private readonly SettingsModel _settingsModel;
-        
-        private ReactiveCommand<Unit,Unit> _addMaskItemCommand;
-        private ReactiveCommand<Unit,Unit> _removeMaskItemCommand;
-        private ReactiveCommand<Unit,Unit> _setDefaultMaskItemsCommand;
-        private ReactiveCommand<Unit,Unit> _saveConfigCommand;
-        private ReactiveCommand<Unit,Unit> _loadConfigCommand;
-        private ReactiveCommand<Unit,Unit> _selectFolderCommand;
 
         public SettingsViewModel(SettingsModel settingsModel)
         {
-            LoadConfigCommand = ReactiveCommand.Create(LoadConfig);
-            SaveConfigCommand = ReactiveCommand.Create(SaveConfig);
-            RemoveMaskItemCommand = ReactiveCommand.Create(RemoveMaskItemMethod);
-            SetDefaultMaskItemsCommand = ReactiveCommand.Create(SetDefaultMaskItemsMethod);
-            AddMaskItemCommand = ReactiveCommand.Create(AddMaskItem);
-            SelectFolderCommand = ReactiveCommand.Create(SelectFolder);
-
             _settingsModel = settingsModel;
+            _settingsModel.PropertyChanged += SettingsModelOnPropertyChanged;
         }
 
-        private void AddMaskItem()
+        ~SettingsViewModel()
         {
-            _settingsModel.RemovingByMasks.Insert(0, new StringModel(@"^<your regex value>$"));
+            _settingsModel.PropertyChanged -= SettingsModelOnPropertyChanged;
         }
 
-        public ReactiveCommand<Unit,Unit> LoadConfigCommand { get; }
-        public ReactiveCommand<Unit, Unit> SaveConfigCommand { get; }
-        public ReactiveCommand<Unit,Unit> RemoveMaskItemCommand { get; }
-        public ReactiveCommand<Unit,Unit> SetDefaultMaskItemsCommand { get; }
-        public ReactiveCommand<Unit,Unit> AddMaskItemCommand { get; }
-        public ReactiveCommand<Unit,Unit> SelectFolderCommand { get; }
-
-
-        
         #region Properties
 
-        public ObservableCollection<StringModel> RemovingByMasks => _settingsModel.RemovingByMasks;
+        public IReadOnlyCollection<StringModel> RemovingByMasks => _settingsModel.RemovingByMasks;
 
         public string MaskTextDemo => _settingsModel.MaskTextDemo;
         
@@ -82,30 +59,45 @@ namespace RenamerMediaFiles.ViewModels
         #endregion
 
         #region Private Methods
-        
-        private void LoadConfig()
+
+        [RelayCommand]
+        public void AddMaskItemCommand()
+        {
+            _settingsModel.RemovingByMasks.Insert(0, new StringModel(@"^<your regex value>$"));
+        }
+        [RelayCommand]
+        public void LoadConfigCommand()
         {
             _settingsModel.LoadConfig();
         }
 
-        private void SaveConfig()
+        [RelayCommand]
+        public void SaveConfigCommand()
         {
             _settingsModel.SaveConfig();
         }
 
-        private void SetDefaultMaskItemsMethod()
+        [RelayCommand]
+        public void SetDefaultMaskItemsCommand()
         {
             _settingsModel.SetDefaultMaskItemsMethod();
         }
         
-        private void SelectFolder()
+        [RelayCommand]
+        public void SelectFolderCommand()
         {
             _settingsModel.SelectFolder();
         }
 
-        private void RemoveMaskItemMethod()
+        [RelayCommand]
+        public void RemoveMaskItemCommand()
         {
             _settingsModel.RemoveMaskItemMethod();
+        }
+
+        private void SettingsModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(e.PropertyName);
         }
 
         #endregion

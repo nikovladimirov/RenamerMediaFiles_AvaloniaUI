@@ -14,25 +14,24 @@ namespace RenamerMediaFiles.ViewModels
         {
             _fileItemModel = fileItemModel;
             _metadataItemModel = metadataItemModel;
-            // _metadataItemModel.PropertyChanged += MetadataItemModelOnPropertyChanged;
-         
+            _metadataItemModel.PropertyChanged += MetadataItemModelOnPropertyChanged;
+
             SourceDateTimeDisplayValue = _metadataItemModel.SourceDateTime.ToString(_fileItemModel.NewNameFormat);
         }
 
         ~MetadataItemViewModel()
         {
-            // if(_metadataItemModel !=null)
-            //     _metadataItemModel.PropertyChanged -= MetadataItemModelOnPropertyChanged;
+            _metadataItemModel.PropertyChanged -= MetadataItemModelOnPropertyChanged;
         }
 
-        // private void MetadataItemModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        // {
-        //     OnPropertyChanged(e.PropertyName);
-        // }
+        private void MetadataItemModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(e.PropertyName);
+        }
 
         public string SourceDateTimeDisplayValue { get; }
         public string DateSourceDisplayValue => _metadataItemModel.DateSourceDisplayValue;
-        
+
         public bool Selected
         {
             get => _metadataItemModel.Selected;

@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Reactive;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.Input;
 using RenamerMediaFiles.Models;
 using RenamerMediaFiles.Services.Implementations;
 
 namespace RenamerMediaFiles.ViewModels
 {
-    public class MainViewModel : ViewModelBase
+    public partial class MainViewModel : ViewModelBase
     {
         private readonly MainModel _mainModel;
         private readonly SettingsModel _settingsModel;
-
-        private List<FileItemViewModel> _fileViewModels;
+        
+        private List<FileItemViewModel> _files;
 
         public MainViewModel()
         {
@@ -29,45 +28,37 @@ namespace RenamerMediaFiles.ViewModels
             _mainModel.PropertyChanged += MainWindowModelOnPropertyChanged;
             
             SettingsViewModel = new SettingsViewModel(_settingsModel);
-            
-            ReadCommand = ReactiveCommand.Create(Read);//, this.WhenAnyValue(vm => _settingsModel.IsValidSettings));
-            RenameCommand = ReactiveCommand.Create(Rename);//, this.WhenAnyValue(vm => IsReadyForRename));
         }
 
-
-        // ~MainViewModel()
-        // {
-        //     if (_mainWindowModel != null)
-        //         _mainWindowModel.PropertyChanged -= MainWindowModelOnPropertyChanged;
-        // }
+        ~MainViewModel()
+        {
+            _mainModel.PropertyChanged -= MainWindowModelOnPropertyChanged;
+        }
 
         public SettingsViewModel SettingsViewModel { get; private set; }
         
-        private void MainWindowModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void MainWindowModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
                 case nameof(_mainModel.Files):
                     MakeInUIThread(() =>
                     {
-                        _fileViewModels = _mainModel.Files.Select(x => new FileItemViewModel(x)).ToList();
+                        _files = _mainModel.Files.Select(x => new FileItemViewModel(x)).ToList();
                         Debug.WriteLine(
                             $"Files?.Count {_mainModel.Files?.Count ?? 0}");
                     });
                     break;
             }
 
-            // MakeInUIThread(() => { this.RaiseAndSetIfChanged() OnPropertyChanged(e.PropertyName); });
+            MakeInUIThread(() => { OnPropertyChanged(e.PropertyName); });
         }
-
-        public ReactiveCommand<Unit,Unit> ReadCommand {get;}
-        public ReactiveCommand<Unit,Unit> RenameCommand {get;}
 
         public string Status => _mainModel.Status;
         public bool IsBusy => _mainModel.IsBusy;
         public bool IsReadyForRename => _mainModel.Files != null && _mainModel.Files.Count > 0;
 
-        public List<FileItemViewModel> FileViewModels => _fileViewModels;
+        public List<FileItemViewModel> Files => _files;
 
 
         #region Private Methods
@@ -82,12 +73,14 @@ namespace RenamerMediaFiles.ViewModels
             // Application.Current.Dispatcher.Invoke(action);
         }
 
-        private void Rename()
+        [RelayCommand]
+        public void RenameCommand(object obj)
         {
             _mainModel.Rename();
         }
 
-        private void Read()
+        [RelayCommand]
+        public void ReadCommand(object obj)
         {
             _mainModel.Read();
         }
