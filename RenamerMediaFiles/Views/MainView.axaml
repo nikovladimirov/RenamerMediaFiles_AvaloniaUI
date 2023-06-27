@@ -10,7 +10,6 @@
     <Design.DataContext>
         <viewModels:MainViewModel />
     </Design.DataContext>
-
     <Grid>
         <Grid Margin="10">
             <Grid.RowDefinitions>

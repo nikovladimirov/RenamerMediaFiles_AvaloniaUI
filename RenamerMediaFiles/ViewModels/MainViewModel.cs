@@ -5,29 +5,21 @@ using System.Diagnostics;
 using System.Linq;
 using CommunityToolkit.Mvvm.Input;
 using RenamerMediaFiles.Models;
-using RenamerMediaFiles.Services.Implementations;
 
 namespace RenamerMediaFiles.ViewModels
 {
     public partial class MainViewModel : ViewModelBase
     {
         private readonly MainModel _mainModel;
-        private readonly SettingsModel _settingsModel;
         
         private List<FileItemViewModel> _files;
 
-        public MainViewModel()
+        public MainViewModel(MainModel mainModel, SettingsViewModel settingsViewModel)
         {
-            var fileService = new JsonFileService();
-            var dialogService = new DialogService();
-            
-            _settingsModel = new SettingsModel(fileService, dialogService);
-            _settingsModel.Init();
-
-            _mainModel = new MainModel(_settingsModel, dialogService);
+            _mainModel = mainModel;
             _mainModel.PropertyChanged += MainWindowModelOnPropertyChanged;
             
-            SettingsViewModel = new SettingsViewModel(_settingsModel);
+            SettingsViewModel = settingsViewModel;
         }
 
         ~MainViewModel()

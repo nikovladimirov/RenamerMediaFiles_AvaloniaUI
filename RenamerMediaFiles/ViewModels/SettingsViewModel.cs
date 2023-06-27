@@ -13,6 +13,7 @@ namespace RenamerMediaFiles.ViewModels
         public SettingsViewModel(SettingsModel settingsModel)
         {
             _settingsModel = settingsModel;
+            _settingsModel.Init();
             _settingsModel.PropertyChanged += SettingsModelOnPropertyChanged;
         }
 
