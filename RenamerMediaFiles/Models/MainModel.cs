@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
-using RenamerMediaFiles.Helpers;
 using RenamerMediaFiles.Services.Interfaces;
 using RenamerMediaFiles.Workers;
 
@@ -15,12 +13,12 @@ namespace RenamerMediaFiles.Models
 
         private List<FileItemModel> _files;
 
-        private readonly IDialogService _dialogService;
+        private readonly ISimpleDialogService _simpleDialogService;
         private readonly SettingsModel _settingsModel;
 
-        public MainModel(SettingsModel settingsModel, IDialogService dialogService)
+        public MainModel(SettingsModel settingsModel, ISimpleDialogService simpleDialogService)
         {
-            _dialogService = dialogService;
+            _simpleDialogService = simpleDialogService;
             _settingsModel = settingsModel;
         }
 
@@ -121,7 +119,7 @@ namespace RenamerMediaFiles.Models
 
         private void ShowMessage(string message, bool isInfoMessage)
         {
-            _dialogService.ShowMessage(message, isInfoMessage);
+            _simpleDialogService.ShowMessage(message, isInfoMessage);
         }
 
         private void OnProcessChanged(string type, int value, int maxValue)

@@ -33,11 +33,11 @@ namespace RenamerMediaFiles.Models
                     },
                 };
 
-        private IDialogService? _dialogService;
+        private ISimpleDialogService? _dialogService;
         private readonly bool _replaceFullName;
         private string _additionalName;
 
-        IDialogService? DialogService => _dialogService ??= App.Current.Services.GetService<IDialogService>();
+        ISimpleDialogService? DialogService => _dialogService ??= App.Current.Services.GetService<ISimpleDialogService>();
 
         public string NewNameFormat { get; private set; }
         public string FilePathDisplayValue { get; private set; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 using RenamerMediaFiles.Helpers;
@@ -11,7 +12,7 @@ namespace RenamerMediaFiles.Models
     public class SettingsModel : ModelBase
     {
         private readonly IFileService _fileService;
-        private readonly IDialogService _dialogService;
+        private readonly ISimpleDialogService _simpleDialogService;
 
         private string _rootPath = DefaultSettings.RootPath;
         private string _newNameFormat = DefaultSettings.NewNameFormat;
@@ -21,10 +22,10 @@ namespace RenamerMediaFiles.Models
         private float _timeZoneOffset;
         private string _maskTextDemo;
 
-        public SettingsModel(IFileService fileService, IDialogService dialogService)
+        public SettingsModel(IFileService fileService, ISimpleDialogService simpleDialogService)
         {
             _fileService = fileService;
-            _dialogService = dialogService;
+            _simpleDialogService = simpleDialogService;
         }
 
         #region Serialized Properties
@@ -120,10 +121,13 @@ namespace RenamerMediaFiles.Models
             DefaultSettings.RemoveByMask.ForEach(x => RemovingByMasks.Add(new StringModel(x)));
         }
         
-        public void SelectFolder()
+        public async Task SelectFolder()
         {
-            if (_dialogService.OpenFolderDialog(RootPath, out string selectedPath))
-                RootPath = selectedPath;
+            var path = await _simpleDialogService.OpenFolderDialog(RootPath);
+            if(!Directory.Exists(path))
+                return;
+
+            RootPath = path;
         }
         
         public void LoadConfig()
@@ -181,7 +185,7 @@ namespace RenamerMediaFiles.Models
         
         private void ShowMessage(string message, bool isInfoMessage)
         {
-            _dialogService.ShowMessage(message, isInfoMessage);
+            _simpleDialogService.ShowMessage(message, isInfoMessage);
         }
     }
 }

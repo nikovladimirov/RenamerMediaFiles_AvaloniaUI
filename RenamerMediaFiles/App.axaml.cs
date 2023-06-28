@@ -36,13 +36,13 @@ public partial class App : Application
         var services = new ServiceCollection();
 
         services.AddSingleton<IFileService, JsonFileService>();
-        services.AddSingleton<IDialogService, DialogService>();
+        services.AddSingleton<ISimpleDialogService, SimpleDialogService>();
         
-        services.AddSingleton<SettingsModel, SettingsModel>();
-        services.AddSingleton<SettingsViewModel, SettingsViewModel>();
+        services.AddSingleton<SettingsModel>();
+        services.AddSingleton<SettingsViewModel>();
         
-        services.AddSingleton<MainModel, MainModel>();
-        services.AddSingleton<MainViewModel, MainViewModel>();
+        services.AddSingleton<MainModel>();
+        services.AddSingleton<MainViewModel>();
 
         return services.BuildServiceProvider();
     }
