@@ -6,11 +6,11 @@ namespace RenamerMediaFiles.Models
 {
     public class MetadataItemModel : ModelBase 
     {
-        private List<DateSource> _dateSources;
+        private List<string> _dateSources;
         private bool _selected;
 
         public DateTime SourceDateTime { get; }
-        public IReadOnlyCollection<DateSource> DateSources => _dateSources;
+        public IReadOnlyCollection<string> DateSources => _dateSources;
         public string NewFileName { get; set; }
         public bool Selected
         {
@@ -19,10 +19,10 @@ namespace RenamerMediaFiles.Models
         }
         public string DateSourceDisplayValue => string.Join("; ", _dateSources);
 
-        public MetadataItemModel(DateTime sourceDateTime, DateSource dateSource, bool replaceFullName, string newNameFormat, string oldAdditionalName)
+        public MetadataItemModel(DateTime sourceDateTime, string dateSource, bool replaceFullName, string newNameFormat, string oldAdditionalName)
         {
             SourceDateTime = sourceDateTime;
-            _dateSources = new List<DateSource> { dateSource };
+            _dateSources = new List<string> { dateSource };
         
             if (replaceFullName)
             {
@@ -33,7 +33,7 @@ namespace RenamerMediaFiles.Models
             NewFileName = $"{SourceDateTime.ToString(newNameFormat)}{(string.IsNullOrEmpty(oldAdditionalName) ? "" : " ")}{oldAdditionalName}";
         }
         
-        public void AddDateSource(DateSource dateSource)
+        public void AddDateSource(string dateSource)
         {
             if(!_dateSources.Contains(dateSource))
                 _dateSources.Add(dateSource);

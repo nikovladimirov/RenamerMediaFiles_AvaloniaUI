@@ -17,9 +17,8 @@ namespace RenamerMediaFiles.Workers
         private readonly string _newNameFormat;
         private readonly bool _replaceFullName;
         private readonly IEnumerable<StringModel> _removingNameParts;
-        private readonly float _timeZoneOffset;
 
-        public FilesReader(string rootPath, string extensionsText, string newNameFormat, bool replaceFullName, IEnumerable<StringModel> removingNameParts, float timeZoneOffset)
+        public FilesReader(string rootPath, string extensionsText, string newNameFormat, bool replaceFullName, IEnumerable<StringModel> removingNameParts)
         {
             if (rootPath.EndsWith("\\"))
                 rootPath = rootPath.Remove(rootPath.Length - 1);
@@ -29,7 +28,6 @@ namespace RenamerMediaFiles.Workers
             _newNameFormat = newNameFormat;
             _replaceFullName = replaceFullName;
             _removingNameParts = removingNameParts;
-            _timeZoneOffset = timeZoneOffset;
         }
         
         public List<FileItemModel> ReadFiles()
@@ -86,7 +84,7 @@ namespace RenamerMediaFiles.Workers
                 }
 
                 var fileItemModel = new FileItemModel(fileInfos[i], _rootPath, _newNameFormat, _replaceFullName,
-                    _removingNameParts, _timeZoneOffset);
+                    _removingNameParts);
 
                 if (string.IsNullOrEmpty(fileItemModel.Exception) &&
                     (!fileItemModel.MetaDataItems.Any()

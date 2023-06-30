@@ -59,13 +59,13 @@ namespace RenamerMediaFiles.Models
 
             IsBusy = true;
 
+            //TODO: create offset hour in UI for each metadata info
             var reader = new FilesReader(
                 _settingsModel.RootPath,
                 _settingsModel.ExtensionText,
                 _settingsModel.NewNameFormat,
                 _settingsModel.ReplaceFullName,
-                _settingsModel.RemovingByMasks,
-                _settingsModel.TimeZoneOffset
+                _settingsModel.RemovingByMasks
             );
 
             try

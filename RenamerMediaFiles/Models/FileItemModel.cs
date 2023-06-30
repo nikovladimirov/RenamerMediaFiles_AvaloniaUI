@@ -6,33 +6,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using MetadataExtractor;
 using Microsoft.Extensions.DependencyInjection;
-using RenamerMediaFiles.Helpers;
 using RenamerMediaFiles.Services.Interfaces;
+using Directory = MetadataExtractor.Directory;
 
 namespace RenamerMediaFiles.Models
 {
     public class FileItemModel
     {
-        private static readonly Dictionary<DateSource, (string attributeName, string attributeTag, string tagMask)>
-            _dateSourceDictionary =
-                new Dictionary<DateSource, (string attributeName, string attributeTag, string tagMask)>
-                {
-                    { DateSource.Exif_IFD0, ("Exif IFD0", "Date/Time", "yyyy:MM:dd HH:mm:ss") },
-                    { DateSource.Exif_SubIFD, ("Exif SubIFD", "Date/Time Original", "yyyy:MM:dd HH:mm:ss") },
-                    // {
-                    //     DateSource.File,
-                    //     ("File", "File Modified Date", "ddd MMM dd HH:mm:ss K yyyy")
-                    // },
-                    {
-                        DateSource.QuickTime_Metadata_Header,
-                        ("QuickTime Metadata Header", "Creation Date", "ddd MMM dd HH:mm:ss K yyyy")
-                    },  
-                    {
-                        DateSource.QuickTime_Movie_Header,
-                        ("QuickTime Movie Header", "Created", "ddd MMM dd HH:mm:ss yyyy")
-                    },
-                };
-
         private ISimpleDialogService? _dialogService;
         private readonly bool _replaceFullName;
         private string _additionalName;
@@ -50,7 +30,7 @@ namespace RenamerMediaFiles.Models
         
         public string Exception { get; set; }
         
-        public FileItemModel(FileInfo fileInfo, string rootPath, string newNameFormat, bool replaceFullName, IEnumerable<StringModel> removingByMasks, float timeZoneOffset)
+        public FileItemModel(FileInfo fileInfo, string rootPath, string newNameFormat, bool replaceFullName, IEnumerable<StringModel> removingByMasks)
         {
             NewNameFormat = newNameFormat;
             _replaceFullName = replaceFullName;
@@ -58,7 +38,7 @@ namespace RenamerMediaFiles.Models
             try
             {
                 RefreshFileInfo(fileInfo, rootPath, removingByMasks);
-                ReadMetadata(timeZoneOffset);
+                ReadMetadata();
                 SelectSingleMetadata();
             }
             catch (Exception ex)
@@ -99,11 +79,11 @@ namespace RenamerMediaFiles.Models
             }
         }
 
-        private void ReadMetadata(float timeZoneOffset)
+        private void ReadMetadata()
         {
             var metadata = ImageMetadataReader.ReadMetadata(FileInfo.FullName);
-            foreach (var key in _dateSourceDictionary.Keys)
-                ReadAttribute(metadata, key, timeZoneOffset);
+            foreach (var keyValue in DefaultSettings.DefaultMetadataInfos)
+                ReadAttribute(metadata, keyValue);
         }
         
         private void SelectSingleMetadata()
@@ -140,37 +120,47 @@ namespace RenamerMediaFiles.Models
             return string.Equals(FileInfo.FullName, destinationPath, StringComparison.OrdinalIgnoreCase);
         }
         
-        private void ReadAttribute(IReadOnlyList<MetadataExtractor.Directory> metadata, DateSource dateSource, float timeZoneOffset)
+        private void ReadAttribute(IReadOnlyList<Directory> metadata, KeyValuePair<string, MetadataInfo> dateSource)
         {
-            (string attributeName, string attributeTag, string tagMask) result;
-            if (!_dateSourceDictionary.TryGetValue(dateSource, out result))
+            var resultDateTime = GetDateTime(metadata, dateSource.Key, dateSource.Value, dateSource.Value.OffsetHour);
+            
+            if(resultDateTime == null)
                 return;
-
-            var dictionaryExif = metadata.FirstOrDefault(x => string.Equals(x.Name, result.attributeName));
-            if (dictionaryExif == null)
-                return;
-
-            var datetimeTag = dictionaryExif.Tags.FirstOrDefault(x => string.Equals(x.Name, result.attributeTag));
-            if (datetimeTag == null)
-                return;
-
-            if (!DateTime.TryParseExact(datetimeTag.Description, result.tagMask,
-                    CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime resultDateTime))
-                return;
-
-            if (result.tagMask.Contains("K"))
-                resultDateTime = resultDateTime.AddHours(timeZoneOffset);
-
-            if (resultDateTime.Year < 1990 || resultDateTime.Year > DateTime.Now.Year)
-                throw new Exception($"{dateSource}. Incorrect datetime {resultDateTime.ToString(NewNameFormat)}");
-
+            
             var existResultDateTime =
-                MetaDataItems.FirstOrDefault(x => Math.Abs((x.SourceDateTime - resultDateTime).TotalMinutes) < 1);
+                MetaDataItems.FirstOrDefault(x => Math.Abs((x.SourceDateTime - resultDateTime.Value).TotalMinutes) < 1);
 
             if (existResultDateTime == null)
-                MetaDataItems.Add(new MetadataItemModel(resultDateTime, dateSource, _replaceFullName, NewNameFormat, _additionalName));
+                MetaDataItems.Add(new MetadataItemModel(resultDateTime.Value, dateSource.Key, _replaceFullName, NewNameFormat, _additionalName));
             else
-                existResultDateTime.AddDateSource(dateSource);
+                existResultDateTime.AddDateSource(dateSource.Key);
+        }
+
+        public static DateTime? GetDateTime(IReadOnlyList<Directory> metadata, string dateSource, MetadataInfo metadataInfo,
+            float timeZoneOffset)
+        {
+
+            var dictionaryExif = metadata.FirstOrDefault(x => string.Equals(x.Name, metadataInfo.AttributeName));
+            if (dictionaryExif == null)
+                return null;
+
+            var datetimeTag = dictionaryExif.Tags.FirstOrDefault(x => string.Equals(x.Name, metadataInfo.AttributeTag));
+            if (datetimeTag == null)
+                return null;
+
+            if (!DateTime.TryParseExact(datetimeTag.Description, metadataInfo.TagMask,
+                    CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime resultDateTime))
+                return null;
+            
+            if(resultDateTime.Kind== DateTimeKind.Local)
+                resultDateTime = resultDateTime.ToUniversalTime();
+            
+            resultDateTime = resultDateTime.AddHours(timeZoneOffset);
+
+            if (resultDateTime.Year < 1990 || resultDateTime.Year > DateTime.Now.Year)
+                throw new Exception($"{dateSource}. Incorrect datetime {resultDateTime.ToString()}");
+
+            return resultDateTime;
         }
     }
 }
