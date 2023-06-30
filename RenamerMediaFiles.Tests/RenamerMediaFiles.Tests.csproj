@@ -31,31 +31,34 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="TestFiles\apple\apple photo 2023-06-10 162110\asdav.JPG">
+      <None Update="TestFiles\apple\20230630_152915.JPG">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="TestFiles\apple\apple video 2023-04-23 184521\2023-04-23 184521.mov">
+      <None Update="TestFiles\apple\20230630_152919.MOV">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="TestFiles\apple\2023-06-03 174548.mov">
+      <None Update="TestFiles\gopro\20230630_154155.JPG">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="TestFiles\apple\2023-06-10 160451.JPG">
+      <None Update="TestFiles\gopro\20230630_154202.MP4">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="TestFiles\huawei\20230630_152818.jpg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="TestFiles\huawei\20230630_152820.mp4">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="TestFiles\samsung\20230630_153027.jpg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="TestFiles\samsung\20230630_153036.mp4">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="TestFiles\gopro\20230630_154148.MP4">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="TestFiles\gopro\2022-08-23 111241.mp4">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="TestFiles\gopro\2023-04-29 145618.JPG">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="TestFiles\huawei\2023-05-28 110651.jpg">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="TestFiles\huawei\2023-06-17 230705.mp4">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="TestFiles\huawei\2023-06-17 213943.mp4">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

@@ -7,9 +7,10 @@ namespace RenamerMediaFiles.Tests;
 public class MetadataTests
 {    
     [Theory]
-    [InlineData("./TestFiles/apple/2023-06-10 160451.JPG","2023.06.10 16:04:51")]
-    [InlineData("./TestFiles/gopro/2023-04-29 145618.JPG","2023.04.29 14:56:18")]
-    [InlineData("./TestFiles/huawei/2023-05-28 110651.jpg","2023.05.28 11:06:51")]
+    [InlineData("./TestFiles/apple/20230630_152915.JPG","2023.06.30 15:29:15")]
+    [InlineData("./TestFiles/samsung/20230630_153027.jpg","2023.06.30 15:30:27")]
+    [InlineData("./TestFiles/huawei/20230630_152818.jpg","2023.06.30 15:28:18")]
+    [InlineData("./TestFiles/gopro/20230630_154155.JPG","2023.06.30 15:41:55")]
     public void CheckParsing_ExifIFD0_DateTime(string filePath, string expectedDateString)
     {
         var fileInfo = new FileInfo(filePath);
@@ -19,9 +20,7 @@ public class MetadataTests
     }
 
     [Theory]
-    [InlineData("./TestFiles/apple/2023-06-03 174548.mov",4,"2023.06.03 17:45:48")]
-    // [InlineData("./TestFiles/gopro/2022-08-23 111241.mp4",3,"2022.08.23 11:12:41")]
-    // [InlineData("./TestFiles/huawei/2023-06-17 213943.mp4", 4,"2023.06.17 21:39:43")]
+    [InlineData("./TestFiles/apple/20230630_152919.mov",4,"2023.06.30 15:29:19")]
     public void CheckParsing_QuickTimeMetadataHeader_DateTime(string filePath, float offserHour,string expectedDateString)
     {
         var fileInfo = new FileInfo(filePath);
@@ -31,9 +30,12 @@ public class MetadataTests
     }
 
     [Theory]
-    [InlineData("./TestFiles/apple/2023-06-03 174548.mov",4,"2023.06.03 17:45:48")]
+    [InlineData("./TestFiles/apple/20230630_152919.mov",4,"2023.06.30 15:29:19")]
+    [InlineData("./TestFiles/samsung/20230630_153036.mp4",4,"2023.06.30 15:30:36")]
+    [InlineData("./TestFiles/huawei/20230630_152820.mp4",4,"2023.06.30 15:28:20")]
+    [InlineData("./TestFiles/gopro/20230630_154202.mp4",4,"2023.06.30 15:42:02")]
+    [InlineData("./TestFiles/gopro/20230630_154148.MP4",4,"2023.06.30 15:41:48")]
     [InlineData("./TestFiles/gopro/2022-08-23 111241.mp4",3,"2022.08.23 11:12:41")]
-    [InlineData("./TestFiles/huawei/2023-06-17 213943.mp4",4,"2023.06.17 21:39:43")]
     public void CheckParsing_QuickTimeMovieHeader_DateTime(string filePath,float offserHour, string expectedDateString)
     {
         var fileInfo = new FileInfo(filePath);
@@ -43,9 +45,12 @@ public class MetadataTests
     }
     
     [Theory]
-    [InlineData("./TestFiles/apple/2023-06-03 174548.mov",4,"2023.06.03 17:45:48")]
+    [InlineData("./TestFiles/apple/20230630_152919.mov",4,"2023.06.30 15:29:19")]
+    [InlineData("./TestFiles/samsung/20230630_153036.mp4",4,"2023.06.30 15:30:36")]
+    [InlineData("./TestFiles/huawei/20230630_152820.mp4",4,"2023.06.30 15:28:20")]
+    [InlineData("./TestFiles/gopro/20230630_154202.mp4",4,"2023.06.30 15:42:02")]
+    [InlineData("./TestFiles/gopro/20230630_154148.MP4",4,"2023.06.30 15:41:48")]
     [InlineData("./TestFiles/gopro/2022-08-23 111241.mp4",3,"2022.08.23 11:12:41")]
-    [InlineData("./TestFiles/huawei/2023-06-17 213943.mp4",4,"2023.06.17 21:39:43")]
     public void CheckParsing_QuickTimeTrackHeader_DateTime(string filePath, float offserHour, string expectedDateString)
     {
         var fileInfo = new FileInfo(filePath);
