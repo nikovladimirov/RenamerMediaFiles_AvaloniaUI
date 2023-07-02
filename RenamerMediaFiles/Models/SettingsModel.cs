@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-
 using RenamerMediaFiles.Helpers;
 using RenamerMediaFiles.Services.Interfaces;
 
@@ -18,8 +16,9 @@ namespace RenamerMediaFiles.Models
         private string _rootPath = DefaultSettings.RootPath;
         private string _newNameFormat = DefaultSettings.NewNameFormat;
         private string _extensionText = DefaultSettings.ExtensionText;
+
         private bool _isValidSettings;
-        private bool _replaceFullName;
+        private bool _changeNameByMasks = DefaultSettings.ChangeNameByMasks;
         private string _maskTextDemo;
 
         public SettingsModel(IFileService fileService, ISimpleDialogService simpleDialogService)
@@ -28,21 +27,21 @@ namespace RenamerMediaFiles.Models
             _simpleDialogService = simpleDialogService;
         }
 
+
         #region Serialized Properties
 
-        //TODO: hide from changing?
-        public ObservableCollection<StringModel> RemovingByMasks { get; set; } = new ObservableCollection<StringModel>();
+        public ObservableCollection<StringModel> RemovingByMasks { get; set; } =
+            new ObservableCollection<StringModel>();
 
-        //TODO: hide from changing?
+        public ObservableCollection<MetaDateTimeExtension> MetaDateTimeExtensions { get; set; } =
+            new ObservableCollection<MetaDateTimeExtension>();
+
         public ObservableCollection<MetadataInfoModel> MetadataInfos { get; set; } =
-            new ObservableCollection<MetadataInfoModel>(DefaultSettings.DefaultMetadataInfos.Select(x=>x.Value));
+            new ObservableCollection<MetadataInfoModel>();
 
         public string RootPath
         {
-            get
-            {
-                return _rootPath;
-            }
+            get { return _rootPath; }
             set
             {
                 SetProperty(ref _rootPath, value);
@@ -70,10 +69,10 @@ namespace RenamerMediaFiles.Models
             }
         }
 
-        public bool ReplaceFullName
+        public bool ChangeNameByMasks
         {
-            get => _replaceFullName;
-            set => SetProperty(ref _replaceFullName, value);
+            get => _changeNameByMasks;
+            set => SetProperty(ref _changeNameByMasks, value);
         }
 
         #endregion Serialized Properties
@@ -114,13 +113,13 @@ namespace RenamerMediaFiles.Models
 
             RemovingByMasks.RemoveAt(0);
         }
-        
+
         public void SetDefaultMaskItemsMethod()
         {
-            RemovingByMasks.Clear();
+            MetadataInfos.Clear();
             DefaultSettings.RemoveByMask.ForEach(x => RemovingByMasks.Add(new StringModel(x)));
         }
-        
+
         public void AddMetadataInfoMethod()
         {
             MetadataInfos.Insert(0, new MetadataInfoModel());
@@ -133,24 +132,41 @@ namespace RenamerMediaFiles.Models
 
             MetadataInfos.RemoveAt(0);
         }
-        
+
         public void SetDefaultMetadataInfosMethod()
         {
             MetadataInfos.Clear();
             DefaultSettings.DefaultMetadataInfos.ForEach(x => MetadataInfos.Add(x.Value));
         }
-        
-        
-        
+
+        public void SetDefaultMetaExtensionsMethod()
+        {
+            MetaDateTimeExtensions.Clear();
+            DefaultSettings.MetaDateTimeExtensions.ForEach(x => MetaDateTimeExtensions.Add(x));
+        }
+
+        public void RemoveMetaExtensionMethod()
+        {
+            if (MetaDateTimeExtensions.Count == 0)
+                return;
+
+            MetaDateTimeExtensions.RemoveAt(0);
+        }
+
+        public void AddMetaExtensionMethod()
+        {
+            MetaDateTimeExtensions.Insert(0, new MetaDateTimeExtension());
+        }
+
         public async Task SelectFolder()
         {
             var path = await _simpleDialogService.OpenFolderDialog(RootPath);
-            if(!Directory.Exists(path))
+            if (!Directory.Exists(path))
                 return;
 
             RootPath = path;
         }
-        
+
         public void LoadConfig()
         {
             try
@@ -159,12 +175,15 @@ namespace RenamerMediaFiles.Models
                 if (loadedSettings == default)
                 {
                     SetDefaultMaskItemsMethod();
+                    SetDefaultMetadataInfosMethod();
+                    SetDefaultMetaExtensionsMethod();
                     return;
                 }
 
                 loadedSettings.CopyByInterfaceTo(this);
                 OnPropertyChanged(nameof(RemovingByMasks));
                 OnPropertyChanged(nameof(MetadataInfos));
+                OnPropertyChanged(nameof(MetaDateTimeExtensions));
             }
             catch (Exception ex)
             {
@@ -204,7 +223,7 @@ namespace RenamerMediaFiles.Models
                 IsValidSettings = false;
             }
         }
-        
+
         private void ShowMessage(string message, bool isInfoMessage)
         {
             _simpleDialogService.ShowMessage(message, isInfoMessage);

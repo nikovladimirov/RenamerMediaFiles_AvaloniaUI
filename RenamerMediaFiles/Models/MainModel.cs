@@ -64,7 +64,7 @@ namespace RenamerMediaFiles.Models
                 _settingsModel.RootPath,
                 _settingsModel.ExtensionText,
                 _settingsModel.NewNameFormat,
-                _settingsModel.ReplaceFullName,
+                _settingsModel.ChangeNameByMasks,
                 _settingsModel.RemovingByMasks
             );
 

@@ -9,17 +9,9 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Border>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="400" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+            <Grid ColumnDefinitions="400,*">
                 <Border BorderThickness="0 0 1 0">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
+                    <Grid ColumnDefinitions="Auto,*">
                         <Button Content=" ... " Margin="2" 
                                 Command="{Binding OpenFolder}"                                    
                                 CommandParameter="{Binding FullName}"/>
@@ -38,11 +30,7 @@
                         </StackPanel>
                     </Grid>
                 </Border>
-                <Grid Column="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                <Grid Column="1" RowDefinitions="Auto,Auto">
                     <ItemsControl ItemsSource="{Binding MetaDataItems}" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="1" Text="{Binding Exception, Mode=OneWay}" Foreground="Red" VerticalAlignment="Center"
                                IsVisible="{Binding Exception, Converter={StaticResource StringIsNullToBoolConverter}, ConverterParameter=invert}" />

@@ -10,6 +10,7 @@ namespace RenamerMediaFiles.Models
         public const string RootPath = "Select folder";
         public const string NewNameFormat ="yyyy-MM-dd HHmmss";
         public const string ExtensionText = "jpg;jpeg;mp4;heic;mov";
+        public const bool ChangeNameByMasks = true;
         
         public static readonly string[] RemoveByMask = new string[]
         {
@@ -25,50 +26,47 @@ namespace RenamerMediaFiles.Models
             "^\\d[\\.\\(\\)\\d _A-Fa-f-]*(IMG_\\d+)?"
         };
 
+        public static readonly List<MetaDateTimeExtension> MetaDateTimeExtensions =
+            new List<MetaDateTimeExtension>
+            {
+                new MetaDateTimeExtension(MetadataCaptions.GoProPhoto, MetaTypes.AttributeValue, "Exif IFD0", "Make", "GoPro", 3),
+                new MetaDateTimeExtension(MetadataCaptions.QuickTime_Metadata, MetaTypes.AttributeName, "QuickTime Metadata Header", 3),
+                new MetaDateTimeExtension(MetadataCaptions.QuickTime_Movie, MetaTypes.AttributeName, "QuickTime Movie Header", 3),
+                new MetaDateTimeExtension(MetadataCaptions.QuickTime_Track, MetaTypes.AttributeName, "QuickTime Track Header", 3),
+            };
+        
         public static readonly Dictionary<string, MetadataInfoModel> DefaultMetadataInfos =
             new Dictionary<string, MetadataInfoModel>
             {
                 {
-                    DateSource.Exif_IFD0,
-                    new MetadataInfoModel(DateSource.Exif_IFD0,
+                    MetadataCaptions.Exif_IFD0,
+                    new MetadataInfoModel(MetadataCaptions.Exif_IFD0,
                         "Exif IFD0",
                         "Date/Time",
-                        "yyyy:MM:dd HH:mm:ss",
-                        0)
+                        "yyyy:MM:dd HH:mm:ss"
+                        )
                 },
                 {
-                    DateSource.Exif_SubIFD,
-                    new MetadataInfoModel(DateSource.Exif_SubIFD,
-                        "Exif SubIFD",
-                        "Date/Time Original",
-                        "yyyy:MM:dd HH:mm:ss",
-                        0)
-                },
-                {
-                    DateSource.QuickTime_Metadata,
-                    new MetadataInfoModel(DateSource.QuickTime_Metadata,
+                    MetadataCaptions.QuickTime_Metadata,
+                    new MetadataInfoModel(MetadataCaptions.QuickTime_Metadata,
                         "QuickTime Metadata Header",
                         "Creation Date",
-                        "ddd MMM dd HH:mm:ss K yyyy",
-                        3)
+                        "ddd MMM dd HH:mm:ss K yyyy")
                 },
                 {
-                    DateSource.QuickTime_Movie,
-                    new MetadataInfoModel(DateSource.QuickTime_Movie,
+                    MetadataCaptions.QuickTime_Movie,
+                    new MetadataInfoModel(MetadataCaptions.QuickTime_Movie,
                         "QuickTime Movie Header",
                         "Created",
-                        "ddd MMM dd HH:mm:ss yyyy",
-                        3)
+                        "ddd MMM dd HH:mm:ss yyyy")
                 },
                 {
-                    DateSource.QuickTime_Track,
-                    new MetadataInfoModel(DateSource.QuickTime_Track,
+                    MetadataCaptions.QuickTime_Track,
+                    new MetadataInfoModel(MetadataCaptions.QuickTime_Track,
                         "QuickTime Track Header",
                         "Created",
-                        "ddd MMM dd HH:mm:ss yyyy",
-                        3)
+                        "ddd MMM dd HH:mm:ss yyyy")
                 },
             };
-
     }
 }

@@ -27,6 +27,7 @@ namespace RenamerMediaFiles.ViewModels
 
         #region Properties
         
+        public IReadOnlyCollection<MetaDateTimeExtension> MetaDateTimeExtensions => _settingsModel.MetaDateTimeExtensions;
         public IReadOnlyCollection<MetadataInfoModel> MetadataInfos => _settingsModel.MetadataInfos;
         public IReadOnlyCollection<StringModel> RemovingByMasks => _settingsModel.RemovingByMasks;
 
@@ -51,11 +52,12 @@ namespace RenamerMediaFiles.ViewModels
             set => _settingsModel.NewNameFormat = value;
         }
 
-        public bool ReplaceFullName
+        public bool ChangeNameByMasks
         {
-            get => _settingsModel.ReplaceFullName;
-            set => _settingsModel.ReplaceFullName = value;
+            get => _settingsModel.ChangeNameByMasks;
+            set => _settingsModel.ChangeNameByMasks = value;
         }
+        
         #endregion
 
         #region Commands
@@ -112,6 +114,23 @@ namespace RenamerMediaFiles.ViewModels
         public void SetDefaultMetadataInfoItems()
         {
             _settingsModel.SetDefaultMetadataInfosMethod();
+        }
+        [RelayCommand]
+        public void AddMetaExtensionItem()
+        {
+            _settingsModel.AddMetaExtensionMethod();
+        }
+        
+        [RelayCommand]
+        public void RemoveMetaExtensionItem()
+        {
+            _settingsModel.RemoveMetaExtensionMethod();
+        }
+
+        [RelayCommand]
+        public void SetDefaultMetaExtensionItems()
+        {
+            _settingsModel.SetDefaultMetaExtensionsMethod();
         }
 
         [RelayCommand]

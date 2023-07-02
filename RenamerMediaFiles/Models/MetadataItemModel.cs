@@ -19,12 +19,12 @@ namespace RenamerMediaFiles.Models
         }
         public string DateSourceDisplayValue => string.Join("; ", _dateSources);
 
-        public MetadataItemModel(DateTime sourceDateTime, string dateSource, bool replaceFullName, string newNameFormat, string oldAdditionalName)
+        public MetadataItemModel(DateTime sourceDateTime, string dateSource, bool changeNameByMasks, string newNameFormat, string oldAdditionalName)
         {
             SourceDateTime = sourceDateTime;
             _dateSources = new List<string> { dateSource };
         
-            if (replaceFullName)
+            if (!changeNameByMasks)
             {
                 NewFileName = SourceDateTime.ToString(newNameFormat);
                 return;

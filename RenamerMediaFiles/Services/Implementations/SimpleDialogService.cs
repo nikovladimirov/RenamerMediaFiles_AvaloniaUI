@@ -22,7 +22,8 @@ namespace RenamerMediaFiles.Services.Implementations
         {
             var openFolderDialog = new OpenFolderDialog();
             openFolderDialog.Title = MainWindow.Instance.Title;
-            openFolderDialog.Directory = defaultPath;
+            if(Directory.Exists(defaultPath))
+                openFolderDialog.Directory = defaultPath;
 
             return await openFolderDialog.ShowAsync(MainWindow.Instance);
         }

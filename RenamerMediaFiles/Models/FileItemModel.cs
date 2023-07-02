@@ -14,11 +14,15 @@ namespace RenamerMediaFiles.Models
     public class FileItemModel
     {
         private ISimpleDialogService? _dialogService;
-        private readonly bool _replaceFullName;
+        private readonly bool _changeNameByMasks;
         private string _additionalName;
+        private SettingsModel? _settingsModel;
 
         ISimpleDialogService? DialogService =>
             _dialogService ??= App.Current.Services.GetService<ISimpleDialogService>();
+
+        SettingsModel? SettingsModel =>
+            _settingsModel ??= App.Current.Services.GetService<SettingsModel>();
 
         public string NewNameFormat { get; private set; }
         public string FilePathDisplayValue { get; private set; }
@@ -31,16 +35,16 @@ namespace RenamerMediaFiles.Models
 
         public string Exception { get; set; }
 
-        public FileItemModel(FileInfo fileInfo, string rootPath, string newNameFormat, bool replaceFullName,
+        public FileItemModel(FileInfo fileInfo, string rootPath, string newNameFormat, bool changeNameByMasks,
             IEnumerable<StringModel> removingByMasks)
         {
             NewNameFormat = newNameFormat;
-            _replaceFullName = replaceFullName;
+            _changeNameByMasks = changeNameByMasks;
 
             try
             {
                 RefreshFileInfo(fileInfo, rootPath, removingByMasks);
-                ReadMetadata();
+                ReadAllMetadata();
                 SelectSingleMetadata();
             }
             catch (Exception ex)
@@ -66,7 +70,7 @@ namespace RenamerMediaFiles.Models
                 FilePathDisplayValue = @"\";
 
             UsedMask = null;
-            if (!_replaceFullName)
+            if (_changeNameByMasks)
             {
                 _additionalName = OriginalFileName;
                 foreach (var mask in removingNameParts)
@@ -81,11 +85,26 @@ namespace RenamerMediaFiles.Models
             }
         }
 
-        private void ReadMetadata()
+        private void ReadAllMetadata()
         {
+            if (SettingsModel == null)
+                return;
+            
             var metadata = ImageMetadataReader.ReadMetadata(FileInfo.FullName);
-            foreach (var keyValue in DefaultSettings.DefaultMetadataInfos)
-                ReadAttribute(metadata, keyValue);
+            foreach (var metadataInfo in SettingsModel.MetadataInfos)
+            {
+                var resultDateTime = ReadMetadata(metadata, metadataInfo, SettingsModel.MetaDateTimeExtensions);
+                if (resultDateTime == null)
+                    continue;
+                
+                var existResultDateTime = MetaDataItems.FirstOrDefault(x => Math.Abs((x.SourceDateTime - resultDateTime.Value).TotalMinutes) < 1);
+
+                if (existResultDateTime == null)
+                    MetaDataItems.Add(new MetadataItemModel(resultDateTime.Value, metadataInfo.Caption, _changeNameByMasks,
+                        NewNameFormat, _additionalName));
+                else
+                    existResultDateTime.AddDateSource(metadataInfo.Caption);
+            }
         }
 
         private void SelectSingleMetadata()
@@ -123,24 +142,55 @@ namespace RenamerMediaFiles.Models
             return string.Equals(FileInfo.FullName, destinationPath, StringComparison.OrdinalIgnoreCase);
         }
 
-        private void ReadAttribute(IReadOnlyList<Directory> metadata,
-            KeyValuePair<string, MetadataInfoModel> dateSource)
+        public static DateTime? ReadMetadata(IReadOnlyList<Directory> metadata, MetadataInfoModel metadataInfo,
+            IReadOnlyCollection<MetaDateTimeExtension> metaExtensions)
         {
-            var resultDateTime = GetDateTime(metadata, dateSource.Value);
-
+            var resultDateTime = GetDateTime(metadata, metadataInfo);
             if (resultDateTime == null)
-                return;
+                return null;
 
-            var existResultDateTime =
-                MetaDataItems.FirstOrDefault(x => Math.Abs((x.SourceDateTime - resultDateTime.Value).TotalMinutes) < 1);
-
-            if (existResultDateTime == null)
-                MetaDataItems.Add(new MetadataItemModel(resultDateTime.Value, dateSource.Key, _replaceFullName,
-                    NewNameFormat, _additionalName));
-            else
-                existResultDateTime.AddDateSource(dateSource.Key);
+            return UpdateDateTimeByExtensions(metadata, metaExtensions, resultDateTime.Value);
         }
 
+        public static DateTime UpdateDateTimeByExtensions(IReadOnlyList<Directory> metadata,
+            IReadOnlyCollection<MetaDateTimeExtension> extensions, DateTime resultDateTime)
+        {
+            foreach (var extension in extensions)
+            {
+                var dictionaryExif = metadata.FirstOrDefault(x => string.Equals(x.Name, extension.AttributeName));
+                if (dictionaryExif == null)
+                    continue;
+
+                if (string.Equals(extension.ConditionEqual, MetaTypes.AttributeName))
+                {
+                    resultDateTime = resultDateTime.AddHours(extension.OffsetHour);
+                    return resultDateTime;
+                }
+
+                var datetimeTag =
+                    dictionaryExif.Tags.FirstOrDefault(x => string.Equals(x.Name, extension.AttributeTag));
+                if (datetimeTag == null)
+                    continue;
+
+                if (string.Equals(extension.ConditionEqual, MetaTypes.AttributeTag))
+                {
+                    resultDateTime = resultDateTime.AddHours(extension.OffsetHour);
+                    return resultDateTime;
+                }
+
+                if (string.Equals(extension.ConditionEqual, MetaTypes.AttributeValue))
+                {
+                    if (string.Equals(datetimeTag.Description, extension.AttributeValue))
+                    {
+                        resultDateTime = resultDateTime.AddHours(extension.OffsetHour);
+                        return resultDateTime;
+                    }
+                }
+            }
+
+            return resultDateTime;
+        }
+        
         public static DateTime? GetDateTime(IReadOnlyList<Directory> metadata, MetadataInfoModel metadataInfoModel)
         {
             var dictionaryExif = metadata.FirstOrDefault(x => string.Equals(x.Name, metadataInfoModel.AttributeName));
@@ -158,8 +208,6 @@ namespace RenamerMediaFiles.Models
 
             if (resultDateTime.Kind == DateTimeKind.Local)
                 resultDateTime = resultDateTime.ToUniversalTime();
-
-            resultDateTime = resultDateTime.AddHours(metadataInfoModel.OffsetHour);
 
             if (resultDateTime.Year < 1990 || resultDateTime.Year > DateTime.Now.Year)
                 throw new Exception($"{metadataInfoModel.Caption}. Incorrect datetime {resultDateTime}");
