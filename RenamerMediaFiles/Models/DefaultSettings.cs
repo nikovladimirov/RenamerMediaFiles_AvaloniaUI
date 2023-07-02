@@ -25,43 +25,48 @@ namespace RenamerMediaFiles.Models
             "^\\d[\\.\\(\\)\\d _A-Fa-f-]*(IMG_\\d+)?"
         };
 
-        public static readonly Dictionary<string, MetadataInfo> DefaultMetadataInfos =
-            new Dictionary<string, MetadataInfo>
+        public static readonly Dictionary<string, MetadataInfoModel> DefaultMetadataInfos =
+            new Dictionary<string, MetadataInfoModel>
             {
                 {
                     DateSource.Exif_IFD0,
-                    new MetadataInfo(DateSource.Exif_IFD0,
+                    new MetadataInfoModel(DateSource.Exif_IFD0,
                         "Exif IFD0",
                         "Date/Time",
-                        "yyyy:MM:dd HH:mm:ss")
+                        "yyyy:MM:dd HH:mm:ss",
+                        0)
                 },
                 {
                     DateSource.Exif_SubIFD,
-                    new MetadataInfo(DateSource.Exif_SubIFD,
+                    new MetadataInfoModel(DateSource.Exif_SubIFD,
                         "Exif SubIFD",
                         "Date/Time Original",
-                        "yyyy:MM:dd HH:mm:ss")
+                        "yyyy:MM:dd HH:mm:ss",
+                        0)
                 },
                 {
-                    DateSource.QuickTime_Metadata_Header,
-                    new MetadataInfo(DateSource.QuickTime_Metadata_Header,
+                    DateSource.QuickTime_Metadata,
+                    new MetadataInfoModel(DateSource.QuickTime_Metadata,
                         "QuickTime Metadata Header",
                         "Creation Date",
-                        "ddd MMM dd HH:mm:ss K yyyy")
+                        "ddd MMM dd HH:mm:ss K yyyy",
+                        3)
                 },
                 {
-                    DateSource.QuickTime_Movie_Header,
-                    new MetadataInfo(DateSource.QuickTime_Movie_Header,
+                    DateSource.QuickTime_Movie,
+                    new MetadataInfoModel(DateSource.QuickTime_Movie,
                         "QuickTime Movie Header",
                         "Created",
-                        "ddd MMM dd HH:mm:ss yyyy")
+                        "ddd MMM dd HH:mm:ss yyyy",
+                        3)
                 },
                 {
-                    DateSource.QuickTime_Track_Header,
-                    new MetadataInfo(DateSource.QuickTime_Track_Header,
+                    DateSource.QuickTime_Track,
+                    new MetadataInfoModel(DateSource.QuickTime_Track,
                         "QuickTime Track Header",
                         "Created",
-                        "ddd MMM dd HH:mm:ss yyyy")
+                        "ddd MMM dd HH:mm:ss yyyy",
+                        3)
                 },
             };
 

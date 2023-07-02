@@ -16,7 +16,7 @@
         <CheckBox IsChecked="{Binding Selected}" Margin="2" />
         <Grid Grid.Column="1" IsEnabled="{Binding Selected}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="250" />
                 <ColumnDefinition Width="150" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>

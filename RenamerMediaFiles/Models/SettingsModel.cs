@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -19,7 +20,6 @@ namespace RenamerMediaFiles.Models
         private string _extensionText = DefaultSettings.ExtensionText;
         private bool _isValidSettings;
         private bool _replaceFullName;
-        private float _timeZoneOffset;
         private string _maskTextDemo;
 
         public SettingsModel(IFileService fileService, ISimpleDialogService simpleDialogService)
@@ -30,7 +30,12 @@ namespace RenamerMediaFiles.Models
 
         #region Serialized Properties
 
+        //TODO: hide from changing?
         public ObservableCollection<StringModel> RemovingByMasks { get; set; } = new ObservableCollection<StringModel>();
+
+        //TODO: hide from changing?
+        public ObservableCollection<MetadataInfoModel> MetadataInfos { get; set; } =
+            new ObservableCollection<MetadataInfoModel>(DefaultSettings.DefaultMetadataInfos.Select(x=>x.Value));
 
         public string RootPath
         {
@@ -61,16 +66,6 @@ namespace RenamerMediaFiles.Models
             set
             {
                 SetProperty(ref _newNameFormat, value);
-                CheckFields();
-            }
-        }
-
-        public float TimeZoneOffset
-        {
-            get => _timeZoneOffset;
-            set
-            {
-                SetProperty(ref _timeZoneOffset, value);
                 CheckFields();
             }
         }
@@ -106,7 +101,12 @@ namespace RenamerMediaFiles.Models
             LoadConfig();
             CheckFields();
         }
-        
+
+        public void AddMaskItemMethod()
+        {
+            RemovingByMasks.Insert(0, new StringModel(@"^<your regex value>$"));
+        }
+
         public void RemoveMaskItemMethod()
         {
             if (RemovingByMasks.Count == 0)
@@ -114,12 +114,33 @@ namespace RenamerMediaFiles.Models
 
             RemovingByMasks.RemoveAt(0);
         }
-
+        
         public void SetDefaultMaskItemsMethod()
         {
             RemovingByMasks.Clear();
             DefaultSettings.RemoveByMask.ForEach(x => RemovingByMasks.Add(new StringModel(x)));
         }
+        
+        public void AddMetadataInfoMethod()
+        {
+            MetadataInfos.Insert(0, new MetadataInfoModel());
+        }
+
+        public void RemoveMetadataInfoMethod()
+        {
+            if (MetadataInfos.Count == 0)
+                return;
+
+            MetadataInfos.RemoveAt(0);
+        }
+        
+        public void SetDefaultMetadataInfosMethod()
+        {
+            MetadataInfos.Clear();
+            DefaultSettings.DefaultMetadataInfos.ForEach(x => MetadataInfos.Add(x.Value));
+        }
+        
+        
         
         public async Task SelectFolder()
         {
@@ -143,6 +164,7 @@ namespace RenamerMediaFiles.Models
 
                 loadedSettings.CopyByInterfaceTo(this);
                 OnPropertyChanged(nameof(RemovingByMasks));
+                OnPropertyChanged(nameof(MetadataInfos));
             }
             catch (Exception ex)
             {

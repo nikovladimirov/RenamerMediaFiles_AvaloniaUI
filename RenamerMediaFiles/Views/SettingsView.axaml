@@ -9,88 +9,84 @@
              x:DataType="viewModels:SettingsViewModel"
              d:DesignHeight="300" d:DesignWidth="900">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Settings:" />
+        <Grid Row="0" Column="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120" />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Content="Load" Command="{Binding LoadConfig}" />
+            <Button Grid.Column="1" Content="Save" Command="{Binding SaveConfig}" />
+        </Grid>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Folder:" />
+        <Grid Row="1" Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     Text="{Binding RootPath}" />
+            <Button Grid.Column="1" Content=" ... " Command="{Binding SelectFolder}" />
+        </Grid>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="File types:" />
+        <TextBox Grid.Row="2" Grid.Column="1" TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 Text="{Binding ExtensionText}" />
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Result mask:" />
+
+        <Grid Grid.Row="3" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="200" />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
-            
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Settings:" />
-            <Grid Row="0" Column="1">
+            <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding NewNameFormat}" />
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding MaskTextDemo}" />
+        </Grid>
+
+        <Expander Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
+            <Expander.Header>
+                <CheckBox Content="Replace full name"
+                          IsChecked="{Binding ReplaceFullName}" />
+            </Expander.Header>
+
+            <Grid IsEnabled="{Binding !ReplaceFullName}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="120" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Content="Load" Command="{Binding LoadConfig}" />
-                <Button Grid.Column="1" Content="Save" Command="{Binding SaveConfig}" />
-            </Grid>
+                <Grid Grid.Column="0">
+                    <StackPanel>
+                        <!-- <TextBlock Text="Removing by mask:" /> -->
+                        <Button Content="+" Command="{Binding AddMaskItem}" />
+                        <Button Content="-" Command="{Binding RemoveMaskItem}" />
+                        <Button Content="default" Command="{Binding SetDefaultMaskItems}" />
+                    </StackPanel>
+                </Grid>
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Folder:" />
-            <Grid Row="1" Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" TextWrapping="Wrap"
-                         AcceptsReturn="True" 
-                         Text="{Binding RootPath}" />
-                <Button Grid.Column="1" Content=" ... " Command="{Binding SelectFolder}" />
-            </Grid>
-
-
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="File types:" />
-            <TextBox Grid.Row="2" Grid.Column="1" TextWrapping="Wrap"
-                     AcceptsReturn="True"
-                     Text="{Binding ExtensionText}" />
-
-            <Grid Row="3" Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Text="Result mask:" />
-                <TextBlock Grid.Row="1" Text="Timezone offset:" />
-            </Grid>
-            
-            <Grid Grid.Row="3" Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding NewNameFormat}" />
-                <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding TimeZoneOffset}" />
-                <TextBlock Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Text="{Binding MaskTextDemo}" />
-            </Grid>
-
-            <CheckBox Grid.Row="4" Grid.Column="1" Content="Replace full name"
-                      IsChecked="{Binding ReplaceFullName}" />
-
-            <Grid Grid.Row="5" Grid.Column="0"
-                  IsEnabled="{Binding !ReplaceFullName}">
-                <StackPanel>
-                    <TextBlock Text="Removing by mask:" />
-                    <Button Content="+" Command="{Binding AddMaskItem}" />
-                    <Button Content="-" Command="{Binding RemoveMaskItem}" />
-                    <Button Content="default" Command="{Binding SetDefaultMaskItems}" />
-                </StackPanel>
-            </Grid>
-
-            <ScrollViewer Grid.Row="5" Grid.Column="1"
-                          VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
-                          IsEnabled="{Binding !ReplaceFullName}">
-                <ItemsControl ItemsSource="{Binding RemovingByMasks}">
+                <ItemsControl Grid.Column="1" ItemsSource="{Binding RemovingByMasks}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel />
@@ -102,7 +98,82 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                
-            </ScrollViewer>
+            </Grid>
+        </Expander>
+        <Expander Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+            <Expander.Header>
+                <TextBlock Text="Metadata tags" />
+            </Expander.Header>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                    <StackPanel>
+                        <!-- <TextBlock Text="Removing by mask:" /> -->
+                        <Button Content="+" Command="{Binding AddMetadataInfoItem}" />
+                        <Button Content="-" Command="{Binding RemoveMetadataInfoItem}" />
+                        <Button Content="default" Command="{Binding SetDefaultMetadataInfoItems}" />
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel Grid.Column="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="Description:" />
+                        <TextBlock Grid.Column="1" Text="Attribute name:" />
+                        <TextBlock Grid.Column="2" Text="Attribute tag:" />
+                        <TextBlock Grid.Column="3" Text="Datetime mask:" />
+                        <TextBlock Grid.Column="4" Text="Offset hour:" />
+
+                    </Grid>
+                    <ItemsControl ItemsSource="{Binding MetadataInfos}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:MetadataInfoModel}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBox Grid.Column="0" TextWrapping="Wrap" AcceptsReturn="True"
+                                             Text="{Binding Caption}" />
+                                    <TextBox Grid.Column="1" TextWrapping="Wrap" AcceptsReturn="True"
+                                             Text="{Binding AttributeName}" />
+                                    <TextBox Grid.Column="2" TextWrapping="Wrap" AcceptsReturn="True"
+                                             Text="{Binding AttributeTag}" />
+                                    <TextBox Grid.Column="3" TextWrapping="Wrap" AcceptsReturn="True"
+                                             Text="{Binding DatetimeMask}" />
+                                    <TextBox Grid.Column="4" TextWrapping="Wrap" AcceptsReturn="True"
+                                             Text="{Binding OffsetHour}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <WrapPanel>
+                        <TextBlock Text="Warning: GoPro datetime should be set at UTC" Foreground="Red"/>
+                        <Button Classes="Link" Content="more..." Command="{Binding NavigateGoProBug}"/>
+                    </WrapPanel>
+                </StackPanel>
+            </Grid>
+        </Expander>
     </Grid>
 </UserControl>
