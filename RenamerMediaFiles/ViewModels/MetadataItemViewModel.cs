@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using RenamerMediaFiles.Helpers;
 using RenamerMediaFiles.Models;
@@ -16,7 +17,7 @@ namespace RenamerMediaFiles.ViewModels
             _metadataItemModel = metadataItemModel;
             _metadataItemModel.PropertyChanged += MetadataItemModelOnPropertyChanged;
 
-            SourceDateTimeDisplayValue = _metadataItemModel.SourceDateTime.ToString(_fileItemModel.NewNameFormat);
+            SourceDateTimeDisplayValue = _metadataItemModel.SourceDateTime.ToString(CultureInfo.InvariantCulture);
         }
 
         ~MetadataItemViewModel()
@@ -30,7 +31,7 @@ namespace RenamerMediaFiles.ViewModels
         }
 
         public string SourceDateTimeDisplayValue { get; }
-        public string DateSourceDisplayValue => _metadataItemModel.DateSourceDisplayValue;
+        public string DateSourceDisplayValue => _metadataItemModel.MetaInfoCaptionsDisplay;
 
         public bool Selected
         {

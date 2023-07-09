@@ -83,8 +83,8 @@ namespace RenamerMediaFiles.Workers
                     Thread.Sleep(10);
                 }
 
-                var fileItemModel = new FileItemModel(fileInfos[i], _rootPath, _newNameFormat, _changeNameByMasks,
-                    _removingNameParts);
+                var fileItemModel = new FileItemModel();
+                fileItemModel.Init(fileInfos[i], _rootPath, _newNameFormat, _changeNameByMasks, _removingNameParts);
 
                 if (string.IsNullOrEmpty(fileItemModel.Exception) &&
                     (!fileItemModel.MetaDataItems.Any()

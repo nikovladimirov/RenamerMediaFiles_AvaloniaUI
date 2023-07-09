@@ -1,42 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using RenamerMediaFiles.Helpers;
 
 namespace RenamerMediaFiles.Models
 {
     public class MetadataItemModel : ModelBase 
     {
-        private List<string> _dateSources;
+        private readonly List<string> _metaInfoCaptions;
         private bool _selected;
 
         public DateTime SourceDateTime { get; }
-        public IReadOnlyCollection<string> DateSources => _dateSources;
+        public IReadOnlyCollection<string> MetaInfoCaptions => _metaInfoCaptions;
         public string NewFileName { get; set; }
         public bool Selected
         {
             get => _selected;
             set => SetProperty(ref _selected, value);
         }
-        public string DateSourceDisplayValue => string.Join("; ", _dateSources);
+        public string MetaInfoCaptionsDisplay => string.Join("; ", _metaInfoCaptions);
 
-        public MetadataItemModel(DateTime sourceDateTime, string dateSource, bool changeNameByMasks, string newNameFormat, string oldAdditionalName)
+        public MetadataItemModel( string metaInfoCaption,DateTime sourceDateTime, string newFileName)
         {
+            _metaInfoCaptions = new List<string> { metaInfoCaption };
             SourceDateTime = sourceDateTime;
-            _dateSources = new List<string> { dateSource };
-        
-            if (!changeNameByMasks)
-            {
-                NewFileName = SourceDateTime.ToString(newNameFormat);
-                return;
-            }
-
-            NewFileName = $"{SourceDateTime.ToString(newNameFormat)}{(string.IsNullOrEmpty(oldAdditionalName) ? "" : " ")}{oldAdditionalName}";
+            NewFileName = newFileName; 
         }
         
-        public void AddDateSource(string dateSource)
+        public void AddMetaInfoCaption(string metaInfoCaption)
         {
-            if(!_dateSources.Contains(dateSource))
-                _dateSources.Add(dateSource);
+            if(!_metaInfoCaptions.Contains(metaInfoCaption))
+                _metaInfoCaptions.Add(metaInfoCaption);
         }
     }
 }

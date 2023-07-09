@@ -49,7 +49,7 @@ namespace RenamerMediaFiles.Workers
                     if (IsCurrentName(fileItemModel, destinationPath))
                         continue;
 
-                    File.Move(fileItemModel.FileInfo.FullName, destinationPath);
+                    RenameActual(fileItemModel.FileInfo.FullName, destinationPath);
                     CountRename++;
                 }
                 catch (Exception ex)
@@ -70,6 +70,11 @@ namespace RenamerMediaFiles.Workers
             return (true, $"Renamed files: {CountRename}");
         }
 
+        internal virtual void RenameActual(string sourceFullPath, string desitantionFullPath)
+        {
+            File.Move(sourceFullPath, desitantionFullPath);
+        }
+        
         private bool IsCurrentName(FileItemModel fileItemVm, string destinationPath)
         {
             return string.Equals(fileItemVm.FileInfo.FullName, destinationPath, StringComparison.OrdinalIgnoreCase);
