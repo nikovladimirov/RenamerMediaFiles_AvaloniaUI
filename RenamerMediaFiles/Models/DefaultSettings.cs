@@ -23,7 +23,8 @@ namespace RenamerMediaFiles.Models
             "^video_\\d+@?[\\.\\(\\)\\d _-]+",
             "^[\\.\\d _-]+(\\(Large\\))",
             "^[\\.\\(\\)\\d _-]+(LLS|BURST\\d+|IMG_\\d+|Richtone\\(HDR\\))",
-            "^\\d[\\.\\(\\)\\d _A-Fa-f-]*(IMG_\\d+)?"
+            "^\\d[\\.\\(\\)\\d _-]*(IMG_\\d+)?",
+            "^[\\dA-Fa-f][\\.\\(\\)\\d_A-Fa-f-][\\.\\(\\)\\d_-]*(IMG_\\d+)?"
         };
 
         public static readonly List<MetaDateTimeExtension> MetaDateTimeExtensions =

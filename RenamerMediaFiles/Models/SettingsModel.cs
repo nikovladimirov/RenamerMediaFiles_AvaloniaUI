@@ -114,12 +114,6 @@ namespace RenamerMediaFiles.Models
             RemovingByMasks.RemoveAt(0);
         }
 
-        public void SetDefaultMaskItemsMethod()
-        {
-            MetadataInfos.Clear();
-            DefaultSettings.RemoveByMask.ForEach(x => RemovingByMasks.Add(new StringModel(x)));
-        }
-
         public void AddMetadataInfoMethod()
         {
             MetadataInfos.Insert(0, new MetadataInfoModel());
@@ -131,6 +125,12 @@ namespace RenamerMediaFiles.Models
                 return;
 
             MetadataInfos.RemoveAt(0);
+        }
+
+        public void SetDefaultMaskItemsMethod()
+        {
+            RemovingByMasks.Clear();
+            DefaultSettings.RemoveByMask.ForEach(x => RemovingByMasks.Add(new StringModel(x)));
         }
 
         public void SetDefaultMetadataInfosMethod()

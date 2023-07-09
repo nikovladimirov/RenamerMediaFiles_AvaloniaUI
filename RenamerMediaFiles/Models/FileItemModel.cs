@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.DependencyInjection;
 using RenamerMediaFiles.Services.Interfaces;
 using RenamerMediaFiles.Workers;
 
@@ -11,14 +10,8 @@ namespace RenamerMediaFiles.Models
 {
     public class FileItemModel
     {
-        private ISimpleDialogService? _dialogService;
-        private SettingsModel? _settingsModel;
-
-        ISimpleDialogService? DialogService =>
-            _dialogService ??= App.Current.Services.GetService<ISimpleDialogService>();
-
-        SettingsModel? SettingsModel =>
-            _settingsModel ??= App.Current.Services.GetService<SettingsModel>();
+        private ISimpleDialogService _simpleDialogService;
+        private SettingsModel _settingsModel;
 
         public string FilePathDisplayValue { get; private set; }
         public string FilePath { get; private set; }
@@ -30,8 +23,10 @@ namespace RenamerMediaFiles.Models
 
         public string Exception { get; set; }
 
-        public FileItemModel()
+        public FileItemModel(SettingsModel settingsModel, ISimpleDialogService simpleDialogService)
         {
+            _simpleDialogService = simpleDialogService;
+            _settingsModel = settingsModel;
         }
 
         public void Init(FileInfo fileInfo, string rootPath, string newNameFormat, bool addAdditionalName, IEnumerable<StringModel> removingByMasks)
@@ -51,7 +46,7 @@ namespace RenamerMediaFiles.Models
 
         public void ShowFileInFolder(string path)
         {
-            DialogService?.ShowFileInFolder(path);
+            _simpleDialogService.ShowFileInFolder(path);
         }
 
         internal string GetAdditionalName(IEnumerable<StringModel> removingNameParts)
@@ -82,13 +77,13 @@ namespace RenamerMediaFiles.Models
 
         internal void ReadAllMetadata(string newNameFormat, string? additionalName)
         {
-            if (SettingsModel == null)
+            if (_settingsModel == null)
                 return;
             
             var metadata = MediaMetadataWrapper.ReadMetadata(FileInfo.FullName);
-            foreach (var metadataInfo in SettingsModel.MetadataInfos)
+            foreach (var metadataInfo in _settingsModel.MetadataInfos)
             {
-                var dateTime = MediaMetadataWrapper.CalculateDateTime(metadata, metadataInfo, SettingsModel.MetaDateTimeExtensions);
+                var dateTime = MediaMetadataWrapper.CalculateDateTime(metadata, metadataInfo, _settingsModel.MetaDateTimeExtensions);
                 if (dateTime == null)
                     continue;
                 

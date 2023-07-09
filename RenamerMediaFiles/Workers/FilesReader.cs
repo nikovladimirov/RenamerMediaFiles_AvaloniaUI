@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using RenamerMediaFiles.Helpers;
 using RenamerMediaFiles.Models;
 
@@ -83,7 +84,7 @@ namespace RenamerMediaFiles.Workers
                     Thread.Sleep(10);
                 }
 
-                var fileItemModel = new FileItemModel();
+                var fileItemModel = App.Current.Services.GetService<FileItemModel>();
                 fileItemModel.Init(fileInfos[i], _rootPath, _newNameFormat, _changeNameByMasks, _removingNameParts);
 
                 if (string.IsNullOrEmpty(fileItemModel.Exception) &&

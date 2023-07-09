@@ -43,6 +43,7 @@ public partial class App : Application
         
         services.AddSingleton<MainModel>();
         services.AddSingleton<MainViewModel>();
+        services.AddTransient<FileItemModel>();
 
         return services.BuildServiceProvider();
     }
