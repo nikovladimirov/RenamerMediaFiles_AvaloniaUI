@@ -6,7 +6,6 @@ namespace RenamerMediaFiles.Tests;
 
 public class MetadataExtensionTests
 {
-    
     [Theory]
     [InlineData(MetaTypes.AttributeName)]
     [InlineData(MetaTypes.AttributeTag)]
@@ -16,11 +15,12 @@ public class MetadataExtensionTests
         var sourceDateTime = DateTime.MinValue;
         var offsetHour = 1.5f;
         var expectedDate = sourceDateTime.AddHours(offsetHour);
-        var metadataStub = new FileMetadataDirectory();
-        metadataStub.Set(FileMetadataDirectory.TagFileName, "testfile");
-        var extensionStub = new MetaDateTimeExtension(metadataStub.Name, attributeType, metadataStub.Name, "File Name", "testfile", offsetHour);
+        var metadataDirectory = new FileMetadataDirectory();
+        metadataDirectory.Set(FileMetadataDirectory.TagFileName, "testfile");
+        var extension = new MetaDateTimeExtension(metadataDirectory.Name, attributeType, metadataDirectory.Name, "File Name", "testfile", offsetHour);
 
-        var result = MediaMetadataWrapper.ApplyMetadataExtensions(new[] { metadataStub }, new[] { extensionStub }, sourceDateTime);
+        var result = MediaMetadataWrapper.ApplyMetadataExtensions(new[] { metadataDirectory }, new[] { extension }, sourceDateTime);
+        
         Assert.Equal(expectedDate, result);
     }
 }

@@ -34,8 +34,8 @@ namespace RenamerMediaFiles.Models
             try
             {
                 RefreshFileInfo(fileInfo, rootPath);
-                var additionalName = addAdditionalName ? GetAdditionalName(removingByMasks) : null;
-                ReadAllMetadata(newNameFormat, additionalName);
+                var additionalName = addAdditionalName ? GetAdditionalName(OriginalFileName, removingByMasks) : null;
+                ReadAllMetadata(FileInfo.FullName, newNameFormat, additionalName);
                 SelectSingleMetadata();
             }
             catch (Exception ex)
@@ -49,9 +49,9 @@ namespace RenamerMediaFiles.Models
             _simpleDialogService.ShowFileInFolder(path);
         }
 
-        internal string GetAdditionalName(IEnumerable<StringModel> removingNameParts)
+        public string GetAdditionalName(string originalFileName, IEnumerable<StringModel> removingNameParts)
         {
-            var result = OriginalFileName;
+            var result = originalFileName;
             foreach (var mask in removingNameParts)
             {
                 if (!Regex.Match(result, mask.Value).Success) 
@@ -63,24 +63,19 @@ namespace RenamerMediaFiles.Models
             return result;
         }
         
-        internal void RefreshFileInfo(FileInfo fileInfo, string rootPath)
+        public void RefreshFileInfo(FileInfo fileInfo, string rootPath)
         {
             FileInfo = fileInfo;
             OriginalFileName = Path.GetFileNameWithoutExtension(fileInfo.Name);
             Extension = fileInfo.Extension;
             FilePath = fileInfo.Directory.FullName;
 
-            FilePathDisplayValue = FilePath.Replace(rootPath, string.Empty);
-            if (string.IsNullOrEmpty(FilePathDisplayValue))
-                FilePathDisplayValue = @"\";
+            FilePathDisplayValue = FilePath.Replace(rootPath, string.Empty) + @"\";
         }
 
-        internal void ReadAllMetadata(string newNameFormat, string? additionalName)
+        public void ReadAllMetadata(string fullName, string newNameFormat, string? additionalName)
         {
-            if (_settingsModel == null)
-                return;
-            
-            var metadata = MediaMetadataWrapper.ReadMetadata(FileInfo.FullName);
+            var metadata = MediaMetadataWrapper.ReadMetadata(fullName);
             foreach (var metadataInfo in _settingsModel.MetadataInfos)
             {
                 var dateTime = MediaMetadataWrapper.CalculateDateTime(metadata, metadataInfo, _settingsModel.MetaDateTimeExtensions);
@@ -99,7 +94,7 @@ namespace RenamerMediaFiles.Models
             }
         }
 
-        internal void SelectSingleMetadata()
+        private void SelectSingleMetadata()
         {
             var singleMetaData = MetaDataItems.OrderBy(x => x.MetaInfoCaptions.FirstOrDefault())
                 .ThenBy(x => x.SourceDateTime).FirstOrDefault();
