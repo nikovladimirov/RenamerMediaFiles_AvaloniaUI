@@ -1,6 +1,5 @@
-﻿using Moq;
+﻿using Moq.AutoMock;
 using RenamerMediaFiles.Models;
-using RenamerMediaFiles.Services.Interfaces;
 
 namespace RenamerMediaFiles.Tests;
 
@@ -13,10 +12,8 @@ public class FileItemModelTests
     {
         var fileInfo = new FileInfo(filePath);
         var rootInfo = new FileInfo(rootPath);
-        var stubDialogService = new Mock<ISimpleDialogService>().Object;
-        var stubFileService = new Mock<IFileService>().Object;
-        var stubSettingsModel = new Mock<SettingsModel>(stubFileService, stubDialogService).Object;
-        var mockFileItemModel = new Mock<FileItemModel>(stubSettingsModel, stubDialogService).Object;
+        var mocker = new AutoMocker();
+        var mockFileItemModel = mocker.CreateInstance<FileItemModel>();
         
         mockFileItemModel.RefreshFileInfo(fileInfo, rootInfo.FullName);
 
@@ -28,10 +25,8 @@ public class FileItemModelTests
     [InlineData("20230630_152915 Test", "^IMG[\\(\\)\\d _-]+(edit|COVER|BURST)?[\\(\\)\\d _-]+(COVER)?", false,"20230630_152915 Test")]
     public void GetAdditionalName_WithDifferentMasks_ReturnsAdditionalPath(string testFileName, string removingMask, bool passMask, string expectedValue)
     {
-        var stubDialogService = new Mock<ISimpleDialogService>().Object;
-        var stubFileService = new Mock<IFileService>().Object;
-        var stubSettingsModel = new Mock<SettingsModel>(stubFileService, stubDialogService).Object;
-        var mockFileItemModel = new Mock<FileItemModel>(stubSettingsModel, stubDialogService).Object;
+        var mocker = new AutoMocker();
+        var mockFileItemModel = mocker.CreateInstance<FileItemModel>();
 
         var actualValue = mockFileItemModel.GetAdditionalName(testFileName, new[] { new StringModel(removingMask) });
 
@@ -47,16 +42,16 @@ public class FileItemModelTests
     [InlineData("./TestFiles/huawei/20230630_152820.mp4",1,2)]
     public void ReadAllMetadata_WithDefaultMetadataInfos_ReturnsMetadataCount(string relativeFilePath, int expectedMetaDataItems, int expectedMetaInfoCount)
     {
-        var stubDialogService = new Mock<ISimpleDialogService>().Object;
-        var stubFileService = new Mock<IFileService>().Object;
-        var stubSettingsModel = new Mock<SettingsModel>(stubFileService, stubDialogService).Object;
-        stubSettingsModel.SetDefaultMetadataInfosMethod();
-        var mockFileItemModel = new Mock<FileItemModel>(stubSettingsModel, stubDialogService).Object;
+        var mocker = new AutoMocker();
+        var stubSettings = mocker.CreateInstance<SettingsModel>();
+        stubSettings.SetDefaultMetadataInfosMethod();
+        mocker.Use(stubSettings);
+        var mockFileItemModel = mocker.CreateInstance<FileItemModel>();
         
         mockFileItemModel.ReadAllMetadata(relativeFilePath, string.Empty, null);
+        
         var actualMetaDataItems = mockFileItemModel.MetaDataItems.Count;
         var actualMetaInfoCount = actualMetaDataItems > 0 ? mockFileItemModel.MetaDataItems.First().MetaInfoCaptions.Count : 0;
-
         Assert.Equal(expectedMetaDataItems, actualMetaDataItems);
         Assert.Equal(expectedMetaInfoCount, actualMetaInfoCount);
     }

@@ -84,7 +84,7 @@ namespace RenamerMediaFiles.Workers
                     Thread.Sleep(10);
                 }
 
-                var fileItemModel = App.Current.Services.GetService<FileItemModel>();
+                var fileItemModel = CreateFileItemModelInstance();
                 fileItemModel.Init(fileInfos[i], _rootPath, _newNameFormat, _changeNameByMasks, _removingNameParts);
 
                 if (string.IsNullOrEmpty(fileItemModel.Exception) &&
@@ -95,6 +95,11 @@ namespace RenamerMediaFiles.Workers
 
                 files.Push(fileItemModel);
             }
+        }
+
+        public virtual FileItemModel CreateFileItemModelInstance()
+        {
+            return App.Current.Services.GetService<FileItemModel>();
         }
         
         private void PrepareFileList(DirectoryInfo currentDirectory, string[] extensions,

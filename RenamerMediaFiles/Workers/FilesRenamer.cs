@@ -70,9 +70,10 @@ namespace RenamerMediaFiles.Workers
             return (true, $"Renamed files: {CountRename}");
         }
 
-        internal virtual void RenameActual(string sourceFullPath, string desitantionFullPath)
+        public virtual bool RenameActual(string sourceFullPath, string desitantionFullPath)
         {
             File.Move(sourceFullPath, desitantionFullPath);
+            return true;
         }
         
         private bool IsCurrentName(FileItemModel fileItemVm, string destinationPath)
