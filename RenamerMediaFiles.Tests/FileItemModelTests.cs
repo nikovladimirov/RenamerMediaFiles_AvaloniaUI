@@ -23,17 +23,14 @@ public class FileItemModelTests
     [Theory]
     [InlineData("20230630_152915 Test", "^\\d[\\.\\(\\)\\d _-]*(IMG_\\d+)?",   true, @"Test")]
     [InlineData("20230630_152915 Test", "^IMG[\\(\\)\\d _-]+(edit|COVER|BURST)?[\\(\\)\\d _-]+(COVER)?", false,"20230630_152915 Test")]
-    public void GetAdditionalName_WithDifferentMasks_ReturnsAdditionalPath(string testFileName, string removingMask, bool passMask, string expectedValue)
+    public void GetAdditionalName_WithDifferentMasks_ReturnsAdditionalPath(string testFileName, string removingMask, bool expectedPassMask, string expectedValue)
     {
         var mocker = new AutoMocker();
         var mockFileItemModel = mocker.CreateInstance<FileItemModel>();
 
         var actualValue = mockFileItemModel.GetAdditionalName(testFileName, new[] { new StringModel(removingMask) });
 
-        if(passMask)
-            Assert.NotNull(mockFileItemModel.UsedMask);
-        else
-            Assert.Null(mockFileItemModel.UsedMask);
+        Assert.Equal(expectedPassMask, mockFileItemModel.UsedMask != null);
         Assert.Equal(expectedValue, actualValue);
     }
     
