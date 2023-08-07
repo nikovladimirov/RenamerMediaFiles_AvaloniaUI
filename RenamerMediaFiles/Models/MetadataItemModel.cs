@@ -20,11 +20,10 @@ namespace RenamerMediaFiles.Models
 
         public string MetaInfoCaptionsDisplay => string.Join("; ", _metaInfoCaptions);
 
-        public MetadataItemModel(string metaInfoCaption, DateTime sourceDateTime, string newFileName)
+        public MetadataItemModel(string metaInfoCaption, DateTime sourceDateTime)
         {
             _metaInfoCaptions = new List<string> { metaInfoCaption };
             SourceDateTime = sourceDateTime;
-            NewFileName = newFileName;
         }
 
         public void AddMetaInfoCaption(string metaInfoCaption)

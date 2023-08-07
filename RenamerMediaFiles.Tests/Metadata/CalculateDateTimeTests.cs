@@ -29,9 +29,14 @@ public class CalculateDateTimeTests
         metaDateTimeExtenstions.ForEach(x=>x.OffsetHour = offsetHour);
         var metadata = MediaMetadataWrapper.ReadMetadata(fileInfo.FullName);
         
-        var result = MediaMetadataWrapper.CalculateDateTime(metadata, metadataInfo, metaDateTimeExtenstions);
-
-        Assert.NotNull(result);
-        Assert.Equal(expectedDate, result.Value);
+        var metaDateTime = MediaMetadataWrapper.ReadDateTime(metadata, metadataInfo);
+        if (metaDateTime == null)
+        {
+            Assert.NotNull(metaDateTime);
+            return;
+        }
+        
+        var calculatedDateTime = MediaMetadataWrapper.ApplyMetadataExtensions(metadata, metaDateTimeExtenstions, metaDateTime.Value);
+        Assert.Equal(expectedDate, calculatedDateTime);
     }
 }

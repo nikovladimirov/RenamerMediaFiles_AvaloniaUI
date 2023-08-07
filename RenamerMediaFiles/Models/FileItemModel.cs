@@ -78,19 +78,22 @@ namespace RenamerMediaFiles.Models
             var metadata = MediaMetadataWrapper.ReadMetadata(fullName);
             foreach (var metadataInfo in _settingsModel.MetadataInfos)
             {
-                var dateTime = MediaMetadataWrapper.CalculateDateTime(metadata, metadataInfo, _settingsModel.MetaDateTimeExtensions);
+                var dateTime = MediaMetadataWrapper.ReadDateTime(metadata, metadataInfo);
                 if (dateTime == null)
                     continue;
                 
-                var existResultDateTime = MetaDataItems.FirstOrDefault(x => Math.Abs((x.SourceDateTime - dateTime.Value).TotalMinutes) < 1);
+                var metadataItemModel = MetaDataItems.FirstOrDefault(x => Math.Abs((x.SourceDateTime - dateTime.Value).TotalMinutes) < 1);
 
-                if (existResultDateTime == null)
-                {
-                    var newName =string.IsNullOrEmpty(additionalName) ? dateTime.Value.ToString(newNameFormat) :  $"{dateTime.Value.ToString(newNameFormat)} {additionalName}";
-                    MetaDataItems.Add(new MetadataItemModel(metadataInfo.Caption, dateTime.Value, newName));
-                }
+                if (metadataItemModel == null)
+                    MetaDataItems.Add(metadataItemModel = new MetadataItemModel(metadataInfo.Caption, dateTime.Value));
                 else
-                    existResultDateTime.AddMetaInfoCaption(metadataInfo.Caption);
+                    metadataItemModel.AddMetaInfoCaption(metadataInfo.Caption);
+
+                var modifiedDateTime = MediaMetadataWrapper.ApplyMetadataExtensions(metadata,
+                    _settingsModel.MetaDateTimeExtensions, dateTime.Value);
+                
+                var newName =string.IsNullOrEmpty(additionalName) ? modifiedDateTime.ToString(newNameFormat) :  $"{modifiedDateTime.ToString(newNameFormat)} {additionalName}";
+                metadataItemModel.NewFileName = newName;
             }
         }
 

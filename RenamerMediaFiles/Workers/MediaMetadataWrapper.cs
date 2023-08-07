@@ -18,19 +18,6 @@ public static class MediaMetadataWrapper
     }
 
     /// <summary>
-    /// Calculate datetime from metadata
-    /// </summary>
-    public static DateTime? CalculateDateTime(IReadOnlyList<Directory> metadata, MetadataInfoModel metadataInfo,
-        IReadOnlyCollection<MetaDateTimeExtension> metaExtensions)
-    {
-        var resultDateTime = ReadDateTime(metadata, metadataInfo);
-        if (resultDateTime == null)
-            return null;
-
-        return ApplyMetadataExtensions(metadata, metaExtensions, resultDateTime.Value);
-    }
-
-    /// <summary>
     /// Apply metadata extensions
     /// </summary>
     public static DateTime ApplyMetadataExtensions(IReadOnlyList<Directory> metadata,
@@ -70,7 +57,7 @@ public static class MediaMetadataWrapper
         return resultDateTime;
     }
 
-    private static DateTime? ReadDateTime(IReadOnlyList<Directory> metadata, MetadataInfoModel metadataInfoModel)
+    public static DateTime? ReadDateTime(IReadOnlyList<Directory> metadata, MetadataInfoModel metadataInfoModel)
     {
         var dictionaryExif = metadata.FirstOrDefault(x => string.Equals(x.Name, metadataInfoModel.AttributeName));
         if (dictionaryExif == null)

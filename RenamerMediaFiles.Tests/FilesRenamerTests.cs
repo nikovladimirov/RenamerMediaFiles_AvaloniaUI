@@ -17,7 +17,7 @@ public class FilesRenamerTests
         var mocker = new AutoMocker();
         var file = mocker.CreateInstance<FileItemModel>();
         file.RefreshFileInfo(fileInfo, fileInfo.DirectoryName);
-        file.MetaDataItems.Add(new MetadataItemModel("test", DateTime.MinValue, newName) { Selected = selectedForRenaming });
+        file.MetaDataItems.Add(new MetadataItemModel("test", DateTime.MinValue) { NewFileName = newName, Selected = selectedForRenaming });
         var mockRenamer = new Mock<FilesRenamer>();
         mockRenamer.Setup(r => r.RenameActual(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
 
