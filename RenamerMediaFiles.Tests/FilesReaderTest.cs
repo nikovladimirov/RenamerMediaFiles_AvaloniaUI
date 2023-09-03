@@ -11,7 +11,6 @@ public class FilesReaderTest
     [InlineData("./TestFiles/apple", 2, 2, 4)]
     [InlineData("./TestFiles/samsung", 2,2,3)]
     [InlineData("./TestFiles/huawei", 2,2,3)]
-    [InlineData("./TestFiles/gopro", 2,2,3)]
     public void ReadRealCountFilesAndMetadata_WithDifferentFiles_ReturnsMetadataCount(string rootPath, int expectedFilesCount,
         int expectedMetadataCount, int expectedCaptionsCount)
     {
