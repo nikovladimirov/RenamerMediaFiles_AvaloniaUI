@@ -28,5 +28,11 @@ namespace RenamerMediaFiles.ViewModels
         {
             _fileItemModel.ShowFileInFolder(path);
         }
+        
+        [RelayCommand]
+        public void SaveFileMetadata(string path)
+        {
+            _fileItemModel.SaveFileMetadata(path);
+        }
     }
 }

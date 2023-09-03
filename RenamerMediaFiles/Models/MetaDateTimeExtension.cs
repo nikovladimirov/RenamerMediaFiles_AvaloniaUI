@@ -4,7 +4,7 @@ public class MetaDateTimeExtension : ModelBase
 {
     private string _caption;
     private string _conditionEqual;
-    private string _metadataName;
+    private string _directoryName;
     private string _tagName;
     private string _tagDescription;
     private float _offsetHour;
@@ -14,21 +14,21 @@ public class MetaDateTimeExtension : ModelBase
         _caption = "New extension";
     }
     
-    public MetaDateTimeExtension(string caption, string conditionEqual, string metadataName, string tagName, string tagDescription, float offsetHour)
+    public MetaDateTimeExtension(string caption, string conditionEqual, string directoryName, string tagName, string tagDescription, float offsetHour)
     {
         _caption = caption;
         _conditionEqual = conditionEqual;
-        _metadataName = metadataName;
+        _directoryName = directoryName;
         _tagName = tagName;
         _tagDescription = tagDescription;
         _offsetHour = offsetHour;
     }
     
-    public MetaDateTimeExtension(string caption, string conditionEqual, string metadataName, float offsetHour)
+    public MetaDateTimeExtension(string caption, string conditionEqual, string directoryName, float offsetHour)
     {
         _caption = caption;
         _conditionEqual = conditionEqual;
-        _metadataName = metadataName;
+        _directoryName = directoryName;
         _offsetHour = offsetHour;
     }
 
@@ -44,10 +44,10 @@ public class MetaDateTimeExtension : ModelBase
         set => SetProperty(ref _conditionEqual, value);
     }
     
-    public string MetadataName 
+    public string DirectoryName 
     {
-        get => _metadataName;
-        set => SetProperty(ref _metadataName, value);
+        get => _directoryName;
+        set => SetProperty(ref _directoryName, value);
     }
     
     public string TagName 

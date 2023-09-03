@@ -7,7 +7,7 @@ namespace RenamerMediaFiles.Tests;
 public class MetadataExtensionTests
 {
     [Theory]
-    [InlineData(MetadataTypes.MetadataName)]
+    [InlineData(MetadataTypes.DirectoryName)]
     [InlineData(MetadataTypes.TagName)]
     [InlineData(MetadataTypes.TagDescription)]
     public void ApplyExtension_ContainAttribute_ReturnsExpectedDateTime(string attributeType)

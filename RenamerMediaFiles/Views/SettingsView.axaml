@@ -134,7 +134,7 @@
                         <Grid ColumnDefinitions="*,*,*,*,*,*">
                             <TextBlock Grid.Column="0" Text="Caption" />
                             <TextBlock Grid.Column="1" Text="Condition equals" />
-                            <TextBlock Grid.Column="2" Text="MetadataName" />
+                            <TextBlock Grid.Column="2" Text="DirectoryName" />
                             <TextBlock Grid.Column="3" Text="TagName" />
                             <TextBlock Grid.Column="4" Text="TagDescription" />
                             <TextBlock Grid.Column="5" Text="Offset hour" />
@@ -153,7 +153,7 @@
                                         <ComboBox Grid.Column="1" SelectedValue="{Binding ConditionEqual}"
                                                   ItemsSource="{Binding Source={x:Static models:MetadataTypes.AllItems}}"/>
                                         <TextBox Grid.Column="2" TextWrapping="Wrap" AcceptsReturn="True"
-                                                 Text="{Binding MetadataName}" />
+                                                 Text="{Binding DirectoryName}" />
                                         <TextBox Grid.Column="3" TextWrapping="Wrap" AcceptsReturn="True"
                                                  Text="{Binding TagName}" />
                                         <TextBox Grid.Column="4" TextWrapping="Wrap" AcceptsReturn="True"

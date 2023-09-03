@@ -12,7 +12,7 @@ public class ReadMetadataTests
     public void CheckExistTag_WithFilesFromDifferentDevices_ReturnsNotNull(string filePath, string metadataName, string metadataTag)
     {
         var fileInfo = new FileInfo(filePath);
-        var metadata = MediaMetadataWrapper.ReadMetadata(fileInfo.FullName);
+        var metadata = MediaMetadataWrapper.ReadMetadataDirectories(fileInfo.FullName);
 
         var directory = metadata.FirstOrDefault(x => x.Name == metadataName);
         var tag = directory?.Tags.FirstOrDefault(x => string.Equals(x.Name, metadataTag));

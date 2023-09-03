@@ -11,6 +11,7 @@ namespace RenamerMediaFiles.Models
     public class FileItemModel
     {
         private ISimpleDialogService _simpleDialogService;
+        private IFileService _iFileService;
         private SettingsModel _settingsModel;
 
         public string FilePathDisplayValue { get; private set; }
@@ -23,9 +24,10 @@ namespace RenamerMediaFiles.Models
 
         public string Exception { get; set; }
 
-        public FileItemModel(SettingsModel settingsModel, ISimpleDialogService simpleDialogService)
+        public FileItemModel(SettingsModel settingsModel, ISimpleDialogService simpleDialogService, IFileService fileService)
         {
             _simpleDialogService = simpleDialogService;
+            _iFileService = fileService;
             _settingsModel = settingsModel;
         }
 
@@ -47,6 +49,14 @@ namespace RenamerMediaFiles.Models
         public void ShowFileInFolder(string path)
         {
             _simpleDialogService.ShowFileInFolder(path);
+        }
+
+        public void SaveFileMetadata(string filePath)
+        {
+            var metadataInfo = MediaMetadataWrapper.GetMetadataInfo(filePath);
+            var jsonPath = $"{Path.GetDirectoryName(filePath)}\\{Path.GetFileNameWithoutExtension(filePath)}.json";
+
+            _iFileService.Save(jsonPath, metadataInfo);
         }
 
         public string GetAdditionalName(string originalFileName, IEnumerable<StringModel> removingNameParts)
@@ -75,7 +85,7 @@ namespace RenamerMediaFiles.Models
 
         public void ReadAllMetadata(string fullName, string newNameFormat, string? additionalName)
         {
-            var metadata = MediaMetadataWrapper.ReadMetadata(fullName);
+            var metadata = MediaMetadataWrapper.ReadMetadataDirectories(fullName);
             foreach (var metadataInfo in _settingsModel.MetadataInfos)
             {
                 var dateTime = MediaMetadataWrapper.ReadDateTime(metadata, metadataInfo);

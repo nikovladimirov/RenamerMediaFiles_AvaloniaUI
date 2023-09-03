@@ -27,7 +27,7 @@ public class CalculateDateTimeTests
         var metadataInfo = DefaultSettings.DefaultMetadataInfos[metaInfo];
         var metaDateTimeExtenstions =DefaultSettings.MetaDateTimeExtensions; 
         metaDateTimeExtenstions.ForEach(x=>x.OffsetHour = offsetHour);
-        var metadata = MediaMetadataWrapper.ReadMetadata(fileInfo.FullName);
+        var metadata = MediaMetadataWrapper.ReadMetadataDirectories(fileInfo.FullName);
         
         var metaDateTime = MediaMetadataWrapper.ReadDateTime(metadata, metadataInfo);
         if (metaDateTime == null)

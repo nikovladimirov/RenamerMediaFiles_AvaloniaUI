@@ -12,11 +12,11 @@ public static class MediaMetadataWrapper
     /// <summary>
     /// Read metadata from file
     /// </summary>
-    public static IReadOnlyList<Directory> ReadMetadata(string fullName)
+    public static IReadOnlyList<Directory> ReadMetadataDirectories(string fullName)
     {
         return ImageMetadataReader.ReadMetadata(fullName);
     }
-
+    
     /// <summary>
     /// Apply metadata extensions
     /// </summary>
@@ -25,11 +25,11 @@ public static class MediaMetadataWrapper
     {
         foreach (var extension in extensions)
         {
-            var dictionaryExif = metadata.FirstOrDefault(x => string.Equals(x.Name.Trim(), extension.MetadataName));
+            var dictionaryExif = metadata.FirstOrDefault(x => string.Equals(x.Name.Trim(), extension.DirectoryName));
             if (dictionaryExif == null)
                 continue;
 
-            if (string.Equals(extension.ConditionEqual, MetadataTypes.MetadataName))
+            if (string.Equals(extension.ConditionEqual, MetadataTypes.DirectoryName))
             {
                 resultDateTime = resultDateTime.AddHours(extension.OffsetHour);
                 return resultDateTime;
@@ -79,5 +79,22 @@ public static class MediaMetadataWrapper
             throw new Exception($"{metadataInfoModel.Caption}. Incorrect datetime {resultDateTime}");
 
         return resultDateTime;
+    }
+
+    public static List<MetadataInfo.DirectoryItem> GetMetadataInfo(string filePath)
+    {
+        var directories = ReadMetadataDirectories(filePath);
+        
+        var list = new List<MetadataInfo.DirectoryItem>();
+        foreach (var directory in directories)
+        {
+            var metadataItemJson = new MetadataInfo.DirectoryItem(directory.Name);
+            foreach (var tagItem in directory.Tags)
+                metadataItemJson.Tags.Add(new MetadataInfo.TagItem(tagItem.Name, tagItem.Description));
+                
+            list.Add(metadataItemJson);
+        }
+
+        return list;
     }
 }
