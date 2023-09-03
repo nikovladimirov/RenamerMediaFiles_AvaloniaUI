@@ -30,10 +30,10 @@ namespace RenamerMediaFiles.Models
         public static readonly List<MetaDateTimeExtension> MetaDateTimeExtensions =
             new List<MetaDateTimeExtension>
             {
-                new MetaDateTimeExtension(MetadataCaptions.GoProPhoto, MetaTypes.AttributeValue, "Exif IFD0", "Make", "GoPro", 3),
-                new MetaDateTimeExtension(MetadataCaptions.QuickTime_Metadata, MetaTypes.AttributeName, "QuickTime Metadata Header", 3),
-                new MetaDateTimeExtension(MetadataCaptions.QuickTime_Movie, MetaTypes.AttributeName, "QuickTime Movie Header", 3),
-                new MetaDateTimeExtension(MetadataCaptions.QuickTime_Track, MetaTypes.AttributeName, "QuickTime Track Header", 3),
+                new MetaDateTimeExtension(MetadataCaptions.GoProVideo, MetadataTypes.TagDescription, "QuickTime File Type", "Major Brand", "mp41", 0),
+                new MetaDateTimeExtension(MetadataCaptions.QuickTime_Metadata, MetadataTypes.MetadataName, "QuickTime Metadata Header", 3),
+                new MetaDateTimeExtension(MetadataCaptions.QuickTime_Movie, MetadataTypes.MetadataName, "QuickTime Movie Header", 3),
+                new MetaDateTimeExtension(MetadataCaptions.QuickTime_Track, MetadataTypes.MetadataName, "QuickTime Track Header", 3),
             };
         
         public static readonly Dictionary<string, MetadataInfoModel> DefaultMetadataInfos =

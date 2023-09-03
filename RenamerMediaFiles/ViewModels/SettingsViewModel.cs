@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using RenamerMediaFiles.Models;
 
@@ -8,9 +7,6 @@ namespace RenamerMediaFiles.ViewModels
 {
     public partial class SettingsViewModel : ViewModelBase
     {
-        private const string _urlGoProBug =
-            "https://community.gopro.com/s/question/0D53b00008BtEUDCA3/time-zone-set-incorrectly?language=en_US";
-
         private readonly SettingsModel _settingsModel;
 
         public SettingsViewModel(SettingsModel settingsModel)
@@ -131,13 +127,6 @@ namespace RenamerMediaFiles.ViewModels
         public void SetDefaultMetaExtensionItems()
         {
             _settingsModel.SetDefaultMetaExtensionsMethod();
-        }
-
-        [RelayCommand]
-        public void NavigateGoProBug()
-        {
-            _settingsModel.SetDefaultMetadataInfosMethod();
-            Process.Start(new ProcessStartInfo { FileName = _urlGoProBug, UseShellExecute = true });
         }
         
         #endregion Commands

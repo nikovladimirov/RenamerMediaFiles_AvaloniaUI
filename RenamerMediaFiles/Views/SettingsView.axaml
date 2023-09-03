@@ -39,11 +39,6 @@
             </Grid>
         </Grid>
         
-        <WrapPanel>
-            <TextBlock Text="Warning: GoPro datetime should be set at UTC for correcting setting video metadata. Then add datetime extension for correcting photo metadata" Foreground="Red" />
-            <Button Classes="Link" Content="more..." Command="{Binding NavigateGoProBug}" />
-        </WrapPanel>
-
         <Expander>
             <Expander.Header>
                 <CheckBox Content="Change name by masks" IsChecked="{Binding ChangeNameByMasks}" />
@@ -76,7 +71,7 @@
         
         <Expander>
             <Expander.Header>
-                <TextBlock Text="Meta tags" />
+                <TextBlock Text="Metadata tags" />
             </Expander.Header>
 
                 <Grid ColumnDefinitions="120,*">
@@ -122,7 +117,7 @@
         </Expander>
         <Expander>
             <Expander.Header>
-                <TextBlock Text="Meta datetime extensions" />
+                <TextBlock Text="Metadata datetime extensions" />
             </Expander.Header>
 
                 <Grid ColumnDefinitions="120,*">
@@ -139,9 +134,9 @@
                         <Grid ColumnDefinitions="*,*,*,*,*,*">
                             <TextBlock Grid.Column="0" Text="Caption" />
                             <TextBlock Grid.Column="1" Text="Condition equals" />
-                            <TextBlock Grid.Column="2" Text="Attribute name" />
-                            <TextBlock Grid.Column="3" Text="Attribute tag" />
-                            <TextBlock Grid.Column="4" Text="Attribute value" />
+                            <TextBlock Grid.Column="2" Text="MetadataName" />
+                            <TextBlock Grid.Column="3" Text="TagName" />
+                            <TextBlock Grid.Column="4" Text="TagDescription" />
                             <TextBlock Grid.Column="5" Text="Offset hour" />
                         </Grid>
                         <ItemsControl ItemsSource="{Binding MetaDateTimeExtensions}">
@@ -155,14 +150,14 @@
                                     <Grid ColumnDefinitions="*,*,*,*,*,*">
                                         <TextBox Grid.Column="0" TextWrapping="Wrap" AcceptsReturn="True"
                                                  Text="{Binding Caption}" />
-                                        <TextBox Grid.Column="1" TextWrapping="Wrap" AcceptsReturn="True"
-                                                 Text="{Binding ConditionEqual}" />
+                                        <ComboBox Grid.Column="1" SelectedValue="{Binding ConditionEqual}"
+                                                  ItemsSource="{Binding Source={x:Static models:MetadataTypes.AllItems}}"/>
                                         <TextBox Grid.Column="2" TextWrapping="Wrap" AcceptsReturn="True"
-                                                 Text="{Binding AttributeName}" />
+                                                 Text="{Binding MetadataName}" />
                                         <TextBox Grid.Column="3" TextWrapping="Wrap" AcceptsReturn="True"
-                                                 Text="{Binding AttributeTag}" />
+                                                 Text="{Binding TagName}" />
                                         <TextBox Grid.Column="4" TextWrapping="Wrap" AcceptsReturn="True"
-                                                 Text="{Binding AttributeValue}" />
+                                                 Text="{Binding TagDescription}" />
                                         <TextBox Grid.Column="5" TextWrapping="Wrap" AcceptsReturn="True"
                                                  Text="{Binding OffsetHour}" />
                                     </Grid>

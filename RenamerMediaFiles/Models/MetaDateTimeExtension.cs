@@ -1,14 +1,12 @@
-﻿using System;
-
-namespace RenamerMediaFiles.Models;
+﻿namespace RenamerMediaFiles.Models;
 
 public class MetaDateTimeExtension : ModelBase
 {
     private string _caption;
     private string _conditionEqual;
-    private string _attributeName;
-    private string _attributeTag;
-    private string _attributeValue;
+    private string _metadataName;
+    private string _tagName;
+    private string _tagDescription;
     private float _offsetHour;
 
     public MetaDateTimeExtension()
@@ -16,21 +14,21 @@ public class MetaDateTimeExtension : ModelBase
         _caption = "New extension";
     }
     
-    public MetaDateTimeExtension(string caption, string conditionEqual, string attributeName, string attributeTag, string attributeValue, float offsetHour)
+    public MetaDateTimeExtension(string caption, string conditionEqual, string metadataName, string tagName, string tagDescription, float offsetHour)
     {
         _caption = caption;
         _conditionEqual = conditionEqual;
-        _attributeName = attributeName;
-        _attributeTag = attributeTag;
-        _attributeValue = attributeValue;
+        _metadataName = metadataName;
+        _tagName = tagName;
+        _tagDescription = tagDescription;
         _offsetHour = offsetHour;
     }
     
-    public MetaDateTimeExtension(string caption, string conditionEqual, string attributeName, float offsetHour)
+    public MetaDateTimeExtension(string caption, string conditionEqual, string metadataName, float offsetHour)
     {
         _caption = caption;
         _conditionEqual = conditionEqual;
-        _attributeName = attributeName;
+        _metadataName = metadataName;
         _offsetHour = offsetHour;
     }
 
@@ -46,22 +44,22 @@ public class MetaDateTimeExtension : ModelBase
         set => SetProperty(ref _conditionEqual, value);
     }
     
-    public string AttributeName 
+    public string MetadataName 
     {
-        get => _attributeName;
-        set => SetProperty(ref _attributeName, value);
+        get => _metadataName;
+        set => SetProperty(ref _metadataName, value);
     }
     
-    public string AttributeTag 
+    public string TagName 
     {
-        get => _attributeTag;
-        set => SetProperty(ref _attributeTag, value);
+        get => _tagName;
+        set => SetProperty(ref _tagName, value);
     }
     
-    public string AttributeValue
+    public string TagDescription
     {
-        get => _attributeValue;
-        set => SetProperty(ref _attributeValue, value);
+        get => _tagDescription;
+        set => SetProperty(ref _tagDescription, value);
     }
     
     public float OffsetHour

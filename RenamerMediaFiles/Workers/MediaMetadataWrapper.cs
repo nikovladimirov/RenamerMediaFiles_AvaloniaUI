@@ -25,29 +25,29 @@ public static class MediaMetadataWrapper
     {
         foreach (var extension in extensions)
         {
-            var dictionaryExif = metadata.FirstOrDefault(x => string.Equals(x.Name, extension.AttributeName));
+            var dictionaryExif = metadata.FirstOrDefault(x => string.Equals(x.Name.Trim(), extension.MetadataName));
             if (dictionaryExif == null)
                 continue;
 
-            if (string.Equals(extension.ConditionEqual, MetaTypes.AttributeName))
+            if (string.Equals(extension.ConditionEqual, MetadataTypes.MetadataName))
             {
                 resultDateTime = resultDateTime.AddHours(extension.OffsetHour);
                 return resultDateTime;
             }
 
             var datetimeTag =
-                dictionaryExif.Tags.FirstOrDefault(x => string.Equals(x.Name, extension.AttributeTag));
+                dictionaryExif.Tags.FirstOrDefault(x => string.Equals(x.Name.Trim(), extension.TagName));
             if (datetimeTag == null)
                 continue;
 
-            if (string.Equals(extension.ConditionEqual, MetaTypes.AttributeTag))
+            if (string.Equals(extension.ConditionEqual, MetadataTypes.TagName))
             {
                 resultDateTime = resultDateTime.AddHours(extension.OffsetHour);
                 return resultDateTime;
             }
 
-            if (!string.Equals(extension.ConditionEqual, MetaTypes.AttributeValue) ||
-                !string.Equals(datetimeTag.Description, extension.AttributeValue))
+            if (!string.Equals(extension.ConditionEqual, MetadataTypes.TagDescription) ||
+                !string.Equals(datetimeTag.Description?.Trim(), extension.TagDescription))
                 continue;
 
             resultDateTime = resultDateTime.AddHours(extension.OffsetHour);

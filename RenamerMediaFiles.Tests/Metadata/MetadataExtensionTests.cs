@@ -7,9 +7,9 @@ namespace RenamerMediaFiles.Tests;
 public class MetadataExtensionTests
 {
     [Theory]
-    [InlineData(MetaTypes.AttributeName)]
-    [InlineData(MetaTypes.AttributeTag)]
-    [InlineData(MetaTypes.AttributeValue)]
+    [InlineData(MetadataTypes.MetadataName)]
+    [InlineData(MetadataTypes.TagName)]
+    [InlineData(MetadataTypes.TagDescription)]
     public void ApplyExtension_ContainAttribute_ReturnsExpectedDateTime(string attributeType)
     {
         var sourceDateTime = DateTime.MinValue;
