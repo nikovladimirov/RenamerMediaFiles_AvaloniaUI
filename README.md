@@ -1,5 +1,5 @@
 #### The application is written in C#. WPF(Avalonia) + MVVM
-#### Windows build: https://disk.yandex.ru/d/sJZOw60LGXcMaQ
+#### Builds: https://github.com/nikovladimirov/RenamerMediaFiles_AvaloniaUI/releases/
 Designed to unify the names of photo and video files based on file metadata into a single date format.
 Functions:
 - renaming files of the specified types by date mask
@@ -14,7 +14,7 @@ Functions:
 <summary>Описание на русском</summary>
 
 #### Приложение написано на C#. WPF(Avalonia) + MVVM
-#### Сборка для Windows: https://disk.yandex.ru/d/sJZOw60LGXcMaQ
+#### Сборки: https://github.com/nikovladimirov/RenamerMediaFiles_AvaloniaUI/releases/
 Предназначено для унификации названий файлов фотографий и видео на основании метаданных файлов в единый формат даты.
 Функции:
 - переименование файлов указанных типов по маске даты
